@@ -1,0 +1,119 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+<section id="content">
+<div class="container">
+<div class="card">
+    <div class="card-header">
+        <h2>Student Detail</h2>
+    </div>
+    
+    <div class="card-body card-padding">
+        <form id="addUser" role="form" method="POST" enctype="multipart/form-data">
+            <input type="hidden" value="+91" name="countryCode" maxlength="30" id="countryCode" class="form-control" placeholder="last Name">
+            <div class="row">
+                <div class="col-sm-6">                       
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control" value="<%= userList.userDetail.fName%>"  maxlength="30" id="firstName" name="firstName" placeholder="First Name">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+                        <div class="fg-line">
+                            <input type="email" name="email" value="<%= userList.email %>" maxlength="60" id="email" class="form-control" placeholder="Email Address">
+                        </div>
+                    </div>
+
+                    
+                    <br/>  
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+                        <div class="fg-line">
+                            <input type="text" name="uniqueId" value="<%= userList.userDetail.uniqueId %>" maxlength="60" id="uniqueId" class="form-control" placeholder="Roll No">
+                        </div>
+                    </div>
+   <br/>
+                </div>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                             <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                            <div class="fg-line">
+                                    <input type="text" name="lastName" value="<%= userList.userDetail.lName %>" maxlength="30" id="lastName" class="form-control" placeholder="last Name">
+                            </div>
+                        </div>          
+                        <br/>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="zmdi zmdi-pin"></i></span>
+                            <div class="fg-line">    
+                                <input type="text"  value="<%= userList.userDetail.rememberToken %>" class="form-control" maxlength="255" name="address" id="address" placeholder="Home Address">
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
+                            <div class="fg-line">    
+                                <div class="dtp-container fg-line">
+                                    <input type='text' value="<%= userList.userDetail.dob %>" autocomplete="off" class="form-control" name="dob" id="dob" placeholder="DOB">
+                                </div>
+                            </div>
+                        </div>
+                        <br/> 
+                        
+                </div>
+                 
+                <div class="m-t-30 text-center">
+                    <% if(userList.userDetail.status == '1'){ %>
+                      <button type="button" onclick="changeStatus('<%= userList.id %>','0')" class="btn btn-danger btn-sm waves-effect">Block</button>
+                    <% }else{ %>
+                      <button type="button" onclick="changeStatus('<%= userList.id %>','1')"  class="btn btn-success btn-sm waves-effect">Approve</button>
+                    <% } %>
+                    <a href="<%- adminpath %>students"><button type="button" class="btn btn-link btn-sm waves-effect">Cancel</button></a>
+                </div>
+            </div>
+        </form>
+    </section>
+</section>
+<%- include ('../../../partials/commonJs') %>
+<script type="text/javascript">
+
+ $(function() {
+    $('#studentTab').addClass('active');
+    $('#studentTab a[href^="<%- adminpath %>students"]').addClass('active');
+});
+
+function changeStatus(id,status)
+{
+        swal({   
+            title: "Are you sure?",   
+            text: "You want to change status!",   
+            type: "warning",   
+            showCancelButton: true,   
+            confirmButtonColor: "#DD6B55",   
+            confirmButtonText: "Yes, Change Status!",   
+            cancelButtonText: "No, cancel plx!",   
+        }, function(isConfirm){   
+            if (isConfirm) {    
+                console.log(id);
+                $.ajax({
+                  type: 'POST',
+                  url: '<%-adminpath%>changeStatus',
+                  data: {'id': id,'status': status},
+                  dataType: 'json',
+                  success: function (response) {
+                      if (response.code == '200') {
+                         showToastSuccess( response.message);
+                         setTimeout(function(){ window.location.reload(); },2500);
+                      }
+                      else{
+                          showToastError(response.message)
+                      }
+                  }
+                });  
+            } 
+        });
+}
+</script>
+ </body>
+</html>

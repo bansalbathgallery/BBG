@@ -1,0 +1,223 @@
+ <%- include ('header') %>
+<style>
+.lc-block{
+        margin-top: 14%;
+}
+.lcb-user {
+    width: 82px;
+    height: 82px;
+}
+</style>
+ <body class="login-content">
+        <!-- Login -->
+        <form id="loginform" role="form" method="POST" enctype="application/x-www-form-urlencoded">
+        <div>
+        <h2>dsfgdg</h2>
+        </div>
+        <div class="lc-block toggled" id="l-login">
+         <img class="lcb-user" src="<%- config.IMAGE_APPEND_URL %>img/profile-pics/1024px_1x.png" alt="">
+            <div class="input-group m-b-20">
+                <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                <div class="fg-line">
+                    <input type="text" onchange="return trim(this)" autocomplete="off" class="form-control" name="email" id="email" placeholder="Email Address">
+                </div>
+            </div>
+            
+            <div class="input-group m-b-20">
+                <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
+                <div class="fg-line">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+            </div>
+            
+            <div class="clearfix"></div>
+            
+            <!--<div class="checkbox">
+                <label>
+                    <input type="checkbox" value="">
+                    <i class="input-helper"></i>
+                    Keep me signed in
+                </label>
+            </div>-->
+            <button type="submit" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></button>
+            <ul class="login-navigation">
+                <li data-block="#l-forget-password" class="bgm-orange">Forgot Password?</li>
+            </ul>
+        </div>
+        </form>
+        
+        <!-- Forgot Password -->
+        <div class="lc-block" id="l-forget-password">
+        <img class="lcb-user" src="<%- config.IMAGE_APPEND_URL %>img/profile-pics/1024px_1x.png" alt="">
+            <p class="text-left">FORGOT PASSWORD!</p>
+            <form id="forgotPassword" role="form" method="POST" enctype="application/x-www-form-urlencoded">
+            <div class="input-group m-b-20">
+                <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+                <div class="fg-line">
+                    <input type="text" onchange="return trim(this)" autocomplete="off" id="name" name="email" class="form-control" placeholder="Email Address">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></button>
+            </form>
+            <ul class="login-navigation">
+                <li data-block="#l-login" class="bgm-green">Login</li>
+            </ul>
+        </div>
+<!-- /.login-box -->
+ 
+<%- include ('../../partials/scripts') %>
+<script type="text/javascript">
+$(document).ready(function () {
+
+  $('.bgm-orange').click(function(){
+    $('#forgotPassword')[0].reset();
+  });
+
+
+
+   $("#loginform").validate({
+    rules: {
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true
+      }
+    },
+    messages: {
+      email: {
+        required: "This field is required",
+         email: "Please enter a valid email address"
+      },
+      password: {
+        required: "This field is required"
+      }
+    },
+    submitHandler: function (form) {
+      var tempform = $('#loginform');
+      var form_data = new FormData(tempform[0]);
+      $(".overlay").show();
+        $.ajax({
+          type: 'POST',
+          url: '<%- adminpath %>login',
+          dataType: 'json',
+          data: form_data,
+          contentType:false,
+          cache:false,
+          processData:false,
+          success: function (response) {
+            $(".overlay").hide();
+            if (response.code == 200) {
+              $.toast({
+                text: response.message,
+                heading: 'Success',
+                icon: 'success',
+                showHideTransition: 'slide',
+                allowToastClose: true,
+                hideAfter: 5000,
+                stack: false, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',
+                loader: false,
+                loaderBg: '#9EC600'
+              });
+               setTimeout(function () {
+                  window.location.href="<%- adminpath %>";
+                }, 2000);
+            } else {
+              $.toast({
+                text: response.message,
+                heading: 'Error',
+                icon: 'error',
+                showHideTransition: 'slide',
+                allowToastClose: true,
+                hideAfter: 5000,
+                stack: false, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',
+                loader: false,
+                loaderBg: '#9EC600'
+              });
+            }
+          }
+        });
+    }
+  });
+
+
+  $('#forgotPassword').validate({
+    rules: {
+      email: {
+        required: true,
+        email: true,
+      }
+    },
+    messages: {
+      email: {
+        required: "Please enter a email address",
+        email: "Please enter a vaild email address"
+      }
+    },
+    submitHandler: function (form) {
+    $("#loading-img").show();
+    var tempform = $('#forgotPassword');
+    var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+            url: '<%- adminpath %>forgotPassword',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+              $.toast({
+                text: response.message,
+                heading: 'Success',
+                icon: 'success',
+                showHideTransition: 'slide',
+                allowToastClose: true,
+                hideAfter: 5000,
+                stack: false, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',
+                loader: false,
+                loaderBg: '#9EC600'
+              });
+                   setTimeout(function(){ $("#loading-img").hide(); window.location.reload();},1000);
+                
+            }
+            else{
+               $.toast({
+                text: response.message,
+                heading: 'Error',
+                icon: 'error',
+                showHideTransition: 'slide',
+                allowToastClose: true,
+                hideAfter: 5000,
+                stack: false, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',
+                loader: false,
+                loaderBg: '#9EC600'
+              });
+            }
+          }
+      });
+    }
+  });
+});
+
+function trim (el) {
+    el.value = el.value.
+       replace (/(^\s*)|(\s*$)/gi, ""). // removes leading and trailing spaces
+       replace (/[ ]{2,}/gi," ").       // replaces multiple spaces with one space 
+       replace (/\n +/,"\n");           // Removes spaces after newlines
+    return;
+}
+</script>
+ </body>
+</html>

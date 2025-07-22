@@ -1,0 +1,166 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+<section id="content">
+<div class="container">
+<div class="card">
+    <div class="card-header">
+        <h2>Add Sub Category</h2>
+    </div>
+    
+    <div class="card-body card-padding">
+        <form role="form" id="addCategory" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-sm-6">  
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control" autocomplete="off" minlength="2" maxlength="30" id="fname" name="fname" placeholder="First Name*">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+                        <div class="fg-line">
+                            <input type="email" autocomplete="off" class="form-control" minlength="2" maxlength="30" id="email" name="email" placeholder="Email*">
+                        </div>
+                    </div>
+                    </br>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-money"></i></span>
+                        <div class="fg-line">
+                            <input type="password" id="password" minlength="5" maxlength="30"  class="form-control"  name="password" placeholder="Password"/>
+                        </div>
+                    </div>
+                    <br/> 
+                     <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-local-phone"></i></span>
+                        <div class="fg-line">
+                            <input type="text" id="pnumber" id="pnumber" class="form-control input-mask" data-mask="0000000000" placeholder="Phone Number">
+                        </div>
+                    </div> 
+                </div> 
+                <div class="col-sm-6">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                      <div class="fg-line">
+                          <input type="text" class="form-control" autocomplete="off" minlength="2" maxlength="30" id="lname" name="lname" placeholder="Last Name*">
+                      </div>
+                    </div>
+                    <br/>
+                    
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="zmdi zmdi-pin"></i></span>
+                      <div class="fg-line">    
+                          <input type="text" minlength="2" maxlength="256" id="address" name="address" class="form-control" placeholder="Address*">
+                      </div>
+                    </div>
+                    <br/>
+                    <div class="col-sm-12 m-b-25">
+                      <select name="roleId" id="roleId" class="selectpicker" title='Choose some roles'>
+                        <% for(var i=0;i<data.length;i++){ %>
+                          <option value="<%- data[i].id %>"><%- data[i].roleName %></option>
+                        <% } %>
+                      </select>
+                    </div>
+                    <br/>
+                </div>   
+            </div>    
+            <div class="m-t-30 text-center">
+                <button class="btn btn-primary btn-sm waves-effect">Create</button>
+                <a href="<%- adminpath %>sub-admins"><button type="button" class="btn btn-link btn-sm waves-effect">Cancel</button></a>
+            </div> 
+        </form>
+    </section>
+</section>
+  <%- include ('../../../partials/commonJs') %>
+<script type="text/javascript">
+
+$(function() {
+    $('.categoryTab').addClass('active toggled');
+    $('#subcategoryTab a').addClass('active');
+});
+
+
+
+  $('#addCategory').validate({
+    ignore: ":hidden:not(select)",
+    rules: {
+      fname: {
+        required: true,
+      }, 
+      lname: {
+        required: true,
+      },
+      email: {
+        required: true,
+      },
+      pnumber: {
+        required: true,
+      },
+      address: {
+        required: true,
+      },
+      password: {
+        required: true,
+      },
+      roleId: {
+        required: true,
+      },
+    },
+    messages: {
+      fname: {
+        required: "Please provide first name.",
+      },
+      lname: {
+        required: "Please provide last name.",
+      },
+      email: {
+        required: "Please provide email.",
+      },
+      pnumber: {
+        required: "Please provide phone number.",
+      },
+      address: {
+        required: "Please provide address.",
+      },
+      roleId: {
+        required: "Please select role.",
+      },
+      password: {
+        required: "Please provide password.",
+      },
+    },
+    submitHandler: function (form) {
+    $(".page-loader").show();
+    var tempform = $('#addCategory');
+    var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+            url: '<%-adminpath%>/sub-admins/postAddUser',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+                   showToastSuccess( response.message);
+                   $(".page-loader").hide();
+                   setTimeout(function(){ window.location.href="<%-adminpath%>sub-admins"; },2500);
+                
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+
+</script>
+
+
+ </body>
+</html>

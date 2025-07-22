@@ -1,0 +1,139 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+    <section id="content">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <div class="pull-left"><h2>Riders List</h2></div>
+                    <div class="pull-right"><a href="<%- adminpath %>riders/requests"><button class="btn btn-primary waves-effect">New Requests</button></a></div>
+                </div>
+                <table id="data-table-command" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th data-column-id="id" data-visible="false">ID</th>
+                            <th data-column-id="name">Name</th>
+                            <th data-column-id="Status">Allowed</th>
+                            <th data-column-id="Phone">Phone No.</th>
+                            <th data-column-id="email" data-order="desc">Email Id</th>
+                          </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var t=0;t<data.length;t++) { %>
+                            <tr>
+                                <td><%-data[t].id %></td>
+                                <td><%-data[t].firstName %> <%-data[t].lastName %>  </td>
+                                <% 
+                                    if(data[t].status=="0") type="Block"
+                                    if(data[t].status=="1") type="Active"
+                                    if(data[t].status=="2") type="Account Unapproved"
+                                    if(data[t].status=="3") type="Approval Pending"
+                                %>
+                                <td><%- type %> </td>
+                                <td>(+<%-data[t].countryCode %>) <%-data[t].phoneNumber %> </td>
+                                <td><%-data[t].email %> </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</section>
+<%- include ('../../../partials/commonJs') %>
+
+<script type="text/javascript">
+    $(function() {
+        $('#riderTab').addClass('active');
+        $('#riderTab a[href^="<%- adminpath %>riders"]').addClass('active');
+    });
+    $(document).ready(function(){
+        //Command Buttons
+        var grid = $("#data-table-command").bootgrid({
+            caseSensitive: false,
+            css: {
+                icon: 'zmdi icon',
+                iconColumns: 'zmdi-view-module',
+                iconDown: 'zmdi-expand-more',
+                iconRefresh: 'zmdi-refresh',
+                iconUp: 'zmdi-expand-less'
+            }
+        }).on("loaded.rs.jquery.bootgrid", function()
+        {
+            /* Executes after data is loaded and rendered */
+            grid.find(".command-order").on("click", function(e)
+            {
+                window.location.href="<%-adminpath%>riders/orderList/"+$(this).data("row-id");
+            }).end().find(".command-chat").on("click", function(e)
+            {
+                window.location.href="<%-adminpath%>riders/chat/"+$(this).data("row-id");
+            }).end().find(".command-block").on("click", function(e)
+            {
+                var id = $(this).data("row-id");
+                swal({   
+                    title: "Are you sure?",   
+                    text: "You want to block this rider!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Yes, Block it!",   
+                    cancelButtonText: "No, cancel!",   
+                }, function(isConfirm){   
+                    if (isConfirm) {    
+                        console.log(id);
+                        $.ajax({
+                            type: 'POST',
+                            url: '<%-adminpath%>riders/status/',
+                            data: {'id': id,'status': '0'},
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.code == '200') {
+                                   showToastSuccess("Rider block successfully");
+                                   //$(".page-loader").hide();
+                                   setTimeout(function(){ window.location.reload(); },1000);
+                                }
+                                else{
+                                   //$(".page-loader").hide();
+                                    showToastError(response.message)
+                                }
+                            }
+                        });    
+                    } 
+                });
+            }).end().find(".command-unblock").on("click", function(e)
+            {
+                var id = $(this).data("row-id");
+                swal({   
+                    title: "Are you sure?",   
+                    text: "You want to active this customer!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Yes, Active it!",   
+                    cancelButtonText: "No, cancel!",   
+                }, function(isConfirm){   
+                    if (isConfirm) {    
+                        console.log(id);
+                        $.ajax({
+                            type: 'POST',
+                            url: '<%-adminpath%>customer/status/',
+                            data: {'id': id,'status': '1'},
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.code == '200') {
+                                   showToastSuccess("Customer active successfully");
+                                   //$(".page-loader").hide();
+                                   setTimeout(function(){ window.location.reload(); },1000);
+                                }
+                                else{
+                                   //$(".page-loader").hide();
+                                    showToastError(response.message)
+                                }
+                            }
+                        });    
+                    } 
+                });
+            });
+        })
+    });
+</script>
+  

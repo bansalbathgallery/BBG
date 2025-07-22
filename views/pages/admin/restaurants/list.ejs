@@ -1,0 +1,116 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+    <section id="content">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <div class="pull-left"><h2>Restaurant List</h2></div>
+                    <div class="pull-right"><a href="<%- adminpath %>restaurant/requests"><button class="btn btn-primary waves-effect">New Requests</button></a></div>
+                </div>
+                <table id="data-table-command" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th data-column-id="id" data-visible="false">ID</th>
+                            <th data-column-id="name">Name</th>
+                            <th data-column-id="Status">Allowed</th>
+                            <th data-column-id="Phone">Phone No.</th>
+                            <th data-column-id="email" data-order="desc">Email Id</th>
+                            <th data-column-id="orders" data-formatter="orders" data-sortable="false">Orders</th>
+                            <th data-column-id="commands" data-formatter="commands" data-sortable="false">Actions</th>
+                          </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var t=0;t<data.length;t++) { %>
+                            <tr>
+                                <td><%-data[t].id %></td>
+                                <td><%-data[t].companyName %>  </td>
+                                <% 
+                                    if(data[t].status=="0") type="Approval Pending"
+                                    if(data[t].status=="1") type="Active"
+                                    if(data[t].status=="2") type="Block"
+                                    if(data[t].status=="3") type="Un-Approved"
+                                %>
+                                <td><%- type %> </td>
+                                <td>(+<%-data[t].countryCode %>) <%-data[t].phoneNumber %> </td>
+                                <td><%-data[t].email %> </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</section>
+<%- include ('../../../partials/commonJs') %>
+
+<script type="text/javascript">
+    $(function() {
+        $('#restaurantTab').addClass('active');
+        $('#restaurantTab a[href^="<%- adminpath %>restaurants"]').addClass('active');
+    });
+    $(document).ready(function(){
+        //Command Buttons
+        var grid = $("#data-table-command").bootgrid({
+            caseSensitive: false,
+            css: {
+                icon: 'zmdi icon',
+                iconColumns: 'zmdi-view-module',
+                iconDown: 'zmdi-expand-more',
+                iconRefresh: 'zmdi-refresh',
+                iconUp: 'zmdi-expand-less'
+            },
+            formatters: {
+            "commands": function(column, row) {
+                return "<button type=\"button\" title=\"Details\" class=\"btn btn-primary command-view waves-effect\" data-row-id=\"" + row.id + "\">View Details</button>";
+            },
+            "orders": function(column, row) {
+                return "<button type=\"button\" title=\"View Orders\" class=\"btn btn-primary command-order waves-effect\" data-row-id=\"" + row.id + "\">View Orders</button>";
+            }
+            }
+        }).on("loaded.rs.jquery.bootgrid", function()
+        {
+            /* Executes after data is loaded and rendered */
+            grid.find(".command-view").on("click", function(e)
+            {
+                window.location.href="<%-adminpath%>restaurant/view/"+$(this).data("row-id");
+            }).end().find(".command-order").on("click", function(e)
+            {
+                window.location.href="<%-adminpath%>restaurant/orderList/"+$(this).data("row-id");
+            }).end().find(".command-block").on("click", function(e)
+            {
+                var id = $(this).data("row-id");
+                swal({   
+                    title: "Are you sure?",   
+                    text: "You want to block this customer!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Yes, Block it!",   
+                    cancelButtonText: "No, cancel!",   
+                }, function(isConfirm){   
+                    if (isConfirm) {    
+                        console.log(id);
+                        $.ajax({
+                            type: 'POST',
+                            url: '<%-adminpath%>customer/status/',
+                            data: {'id': id,'status': '0'},
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.code == '200') {
+                                   showToastSuccess("Customer block successfully");
+                                   //$(".page-loader").hide();
+                                   setTimeout(function(){ window.location.reload(); },1000);
+                                }
+                                else{
+                                   //$(".page-loader").hide();
+                                    showToastError(response.message)
+                                }
+                            }
+                        });    
+                    } 
+                });
+            });
+        })
+    });
+</script>
+  

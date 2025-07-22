@@ -1,0 +1,510 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+<style type="text/css">
+  .bs-item {
+    background: #fff;
+    margin-bottom: 13px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 2px;
+  }
+  .search {
+    display: none
+  }
+   @media only screen and (max-width : 540px)
+            {
+                .chat-sidebar
+                {
+                    display: none !important;
+                }
+               
+                .chat-popup
+                {
+                    display: none !important;
+                }
+            }
+            
+            .popup-box
+            {
+                display: none;
+                position: fixed;
+                bottom: 0px;
+                right: 220px;
+                height: 285px;
+                background-color: rgb(237, 239, 244);
+                width: 300px;
+                border: 1px solid rgba(29, 49, 91, .3);
+            }
+            
+            .popup-box .popup-head
+            {
+                background-color: #6d84b4;
+                padding: 5px;
+                color: white;
+                font-weight: bold;
+                font-size: 14px;
+                clear: both;
+            }
+            
+            .popup-box .popup-head .popup-head-left
+            {
+                float: left;
+            }
+            
+            .popup-box .popup-head .popup-head-right
+            {
+                float: right;
+                opacity: 0.5;
+            }
+            
+            .popup-box .popup-head .popup-head-right a
+            {
+                text-decoration: none;
+                color: inherit;
+            }
+            
+            .popup-box .popup-messages
+            {
+                height: 100%;
+            }
+            .message{
+     width: 234px;
+     }
+     .sendmsg{     
+     width:60px;
+     }
+  }
+</style>
+    <section id="content">
+     <div class="container">
+         <div class="m-b-30">
+          <div class="block-header ">
+            <b>ORDER LIST</b>
+             
+             
+          </div>
+             
+          </div>
+      <div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="col-sm-6 col-xs-4">
+                    <div class="col-sm-6 m-b-10" style="float: left;">
+                        <div class="form-group fg-line">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="zmdi zmdi-search"></i></span>
+                            <div class="fg-line">
+                                <input type="text" name="search" id="search" class="form-control" placeholder="Search By Name">
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-4">
+                    <div class="col-sm-6 m-b-10" style="float: right;">
+                        <div class="form-group fg-line">
+                            <select class="selectpicker" name="orderStatus" id="orderStatus">
+                                <option value="" selected>All</option>
+                                <option value="0">Pending</option>
+                                <% for(var i=0;i<orderS.length;i++){ %>
+                                  <option value="<%- orderS[i].id %>"><%- orderS[i].statusName %></option>
+                                <% } %>
+                            </select>
+                        </div>  
+                    </div>
+                </div>
+                </div>
+                <table id="data-table-command" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th data-column-id="id" data-visible="false">ID</th>
+                            <th data-column-id="OrderNo">Order No</th>
+                            <th data-column-id="Status">Order Status</th>
+                            <th data-column-id="Rname">Restaurant Name</th>
+                            <th data-column-id="name">Customer Name</th>
+                            <th data-column-id="Contact">Contact</th>
+                            <th data-column-id="price">Price (<%-CURRENCY%>)</th>
+                            <th data-column-id="OrderDate">Order Date</th>
+                            <th data-column-id="commands" data-formatter="commands" data-sortable="false">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderData">
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </section>
+</section>
+<div class="modal fade" id="preventClick" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title">Support & Chat</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-group">
+                        <div class="fg-line">
+                            <div class="select">
+                                <select class="form-control" name="adminchat" id="adminchat">
+                                  <option value="">Chat with Customer</option>
+                                  <option value="">Chat with Restaurant</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                      
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" onclick="register_popup()"class="btn btn-link">Start Chat</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>-->
+        <script type="text/javascript">
+        $(function() {
+            $('#orderTab').addClass('active');
+            $('#orderTab a[href^="<%- adminpath %>orders"]').addClass('active');
+        }); 
+
+          var grid = $("#data-table-command").bootgrid({
+                  caseSensitive: false,
+            
+                    css: {
+                        icon: 'zmdi icon',
+                        iconColumns: 'zmdi-view-module',
+                        iconDown: 'zmdi-expand-more',
+                        iconRefresh: 'zmdi-refresh',
+                        iconUp: 'zmdi-expand-less'
+                    },
+                    formatters: {
+                        "commands": function(column, row) {
+                            /* "<button type=\"button\" title=\"Chat History\" class=\"btn btn-icon command-chat waves-effect waves-circle\" data-row-id=\"" + row.id + "\"><span class=\"zmdi zmdi-comment-alt-text\"></span></button>" */
+                            return"<button type=\"button\" class=\"btn btn-icon command-eye waves-effect waves-circle\" data-row-id=\"" + row.id + "\"><span class=\"zmdi zmdi-eye\"></span></button>";
+                        }
+                    }
+                }).on("loaded.rs.jquery.bootgrid", function()
+              {
+                /* Executes after data is loaded and rendered */
+                grid.find(".command-block").on("click", function(e)
+                {
+                    var id = $(this).data("row-id");
+                    $.ajax({
+                        type: 'POST',
+                        url: '<%-adminpath%>payment/status',
+                        data: {'id': id,'status': '2'},
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.code == '200') {
+                                   showToastSuccess( response.message);
+                                   //$(".page-loader").hide();
+                                   setTimeout(function(){ window.location.reload(); },2500);
+                            }
+                            else{
+                               //$(".page-loader").hide();
+                                showToastError(response.message)
+                            }
+                        }
+                    });  
+                    
+                }).end().find(".command-eye").on("click", function(e)
+                {
+                    window.location.href="<%-adminpath%>orders/details?orderId="+$(this).data("row-id");
+                }).end().find(".command-chat").on("click", function(e)
+                {
+                    var id = $(this).data("row-id");
+             
+                    $.ajax({
+                        type: 'POST',
+                        url: '<%-adminpath%>orders/details',
+                        data: {'orderId': id},
+                        dataType: 'json',
+                        success: function (response) {
+                        console.log(response)
+                            if (response.code == '200') {
+                            var data = response.data; 
+                                  $('#adminchat').html('');
+                                  var userIds = data.userId;
+                                  var companyId = data.companyId;
+                                  $('#adminchat').append(`<option value="${companyId}"> 
+                                    Chat with Restaurant 
+                                  </option>`);
+                                  $('#adminchat').append(`<option value="${userIds}"> 
+                                    Chat with Customer 
+                                  </option>`);
+                                  $('#preventClick').modal('show');
+                            }
+                            else{
+                               //$(".page-loader").hide();
+                                showToastError(response.message)
+                            }
+                        }
+                    });  
+                }).end().find(".command-unblock").on("click", function(e)
+                {
+                    var id = $(this).data("row-id");
+                    $.ajax({
+                        type: 'POST',
+                        url: '<%-adminpath%>payment/status',
+                        data: {'id': id,'status': '1'},
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.code == '200') {
+                                   showToastSuccess( response.message);
+                                   //$(".page-loader").hide();
+                                   setTimeout(function(){ window.location.reload(); },2500);
+                            }
+                            else{
+                               //$(".page-loader").hide();
+                                showToastError(response.message)
+                            }
+                        }
+                    });  
+                    
+                });
+            })
+
+
+function getFilter(currentPage)
+    {
+        currentPage=currentPage
+        var limit=50
+        $('#loading1').show()
+        var status="";
+        var fromDate="";
+        var toDate="";
+        var orderStatus = $('#orderStatus').val();
+        var search = $('#search').val();
+        //alert(fromDate)
+        $.ajax({
+            type: 'POST',
+            url: '<%- adminpath %>orders/list',
+            dataType: 'json',
+            data: {'fromDate':fromDate,'transactionStatus':status ,'toDate':toDate,'page':currentPage,'limit':limit,'orderStatus':orderStatus,'search':search},
+            success: function (response) {
+                console.log(response)
+                $('#loading1').hide()
+
+                if (response.code == '200') {
+
+                    $('#orderData').html('')
+                    var data1=response.body.data
+                    var data=response.body.data.rows
+                    dataList=data
+setData(data)
+//appendPagination(currentPage,Math.ceil(data1.count/limit))
+//appendStat(response.body.counts,response.body.escrow)
+
+                }
+                else{
+                   
+                    showToastError(response.message)
+                }
+            },
+
+            error :function(response)
+            {
+                $('#loading1').hide()
+
+                showToastError(response.message)
+
+            }
+        });
+    }
+    
+  
+  function setData(data)
+  {
+    var row= [];
+    $('#data-table-command').bootgrid('clear');
+    for(var t=0;t<data.length;t++)
+    {
+       var status="Pending"
+      var style="display:none" 
+      var style1="display:block" 
+      
+      if(data[t].progressStatus=="1") status="Accpted"
+      if(data[t].progressStatus=="2") status="Cancelled By User"
+      if(data[t].progressStatus=="3") status="Processing"
+      if(data[t].progressStatus=="4") status="Cancelled By Comapny"
+      if(data[t].progressStatus=="5") status="Delivered"
+      if(data[t].progressStatus=="6") status="Rejected"
+      if(data[t].progressStatus=="7") status="Food Prepared"
+      if(data[t].progressStatus=="8") status="On the way"
+      console.log(data[t].orderNo)
+      row.push({
+        "id": data[t].id,
+        "OrderNo": data[t].orderNo,
+        "Status": status,
+        "Rname": data[t].company.companyName,
+        "name": data[t].user.firstName+ " "+  data[t].user.lastName,
+        "Contact": data[t].user.countryCode +" "+ data[t].user.phoneNumber,
+        "price": data[t].totalOrderPrice,
+        "OrderDate": data[t].serviceDateTime
+      })
+    }
+    grid.bootgrid('append',row);
+     
+  }
+   
+  function appendStat(data,escrow)
+  {
+    var total=0;
+    var count=0;
+
+   // alert(total)
+    for(var k=0;k<data.length;k++)
+    {
+        count=count+data[k].count
+        total=total+data[k].totalSum
+    }
+    $('#totalPayment').html(total)
+    $('#totalPaymentCount').html(count)
+  }
+
+  var currentPage=1
+  getFilter(currentPage);
+  /*var $currentUserId;
+  var socket = io('<%-config.BASEURL%>');
+  $(document).on('click', "input.sendmsg", function() {
+    var $messageBox = $(this).parent().children('.message');
+    var $reciever = $(this).attr('chatboxid');
+    socket.emit('send message', {msg:$messageBox.val(),sender: $currentUserId, reciever:$reciever});
+    $messageBox.val('');
+  });
+  
+  $(document).on( "keypress",'input.message', function(event) {     
+    if (event.which == 13 && !event.shiftKey) {     
+      event.preventDefault();
+      var $messageBox = $(this);
+      var $reciever = $(this).attr('chatboxid');
+      socket.emit('send message', {msg:$messageBox.val(),sender: $currentUserId, reciever:$reciever});
+      $messageBox.val('');
+    }
+  });
+  Array.remove = function(array, from, to) {
+    var rest = array.slice((to || from) + 1 || array.length);
+    array.length = from < 0 ? array.length + from : from;
+    return array.push.apply(array, rest);
+  };
+  socket.on('new message',function(data){
+    $.each($('.chat'),function(index,datax){
+      if($(datax).attr('chatboxid')==data.msg.reciever || $(datax).attr('chatboxid')==data.msg.sender){
+      if($currentUserId == data.msg.reciever){
+      $(datax).append("</br><div class='recieve'><b>"+data.nickname+": </b>"+data.msg.msg+"</div>");
+      $(datax).animate({scrollTop: $(datax)[0].scrollHeight}, 2000);
+      }else if( $currentUserId == data.msg.sender){
+      $(datax).append("</br><div class='send'><b>"+data.nickname+": </b>"+data.msg.msg+"</div>");
+      $(datax).animate({scrollTop: $(datax)[0].scrollHeight}, 2000);
+      }
+      }
+    });
+  });
+  var total_popups = 0;
+  var popups = [];
+  
+  function close_popup(id)
+  {
+    for(var iii = 0; iii < popups.length; iii++)
+    {
+      if(id == popups[iii])
+      {
+        Array.remove(popups, iii);
+        document.getElementById(id).style.display = "none";
+        calculate_popups();
+        return;
+      }
+    }   
+  }
+
+ 
+  function display_popups()
+  {
+    var right = 220;
+    var iii = 0;
+    for(iii; iii < total_popups; iii++)
+    {
+      if(popups[iii] != undefined)
+      {
+        var element = document.getElementById(popups[iii]);
+        if(element !=null && element!=undefined){
+          element.style.right = right + "px";
+          right = right + 320;
+          element.style.display = "block";
+        }
+      }
+    }
+    for(var jjj = iii; jjj < popups.length; jjj++)
+    {
+      var element = document.getElementById(popups[jjj]);
+      if(element !=null && element!=undefined){
+        element.style.display = "none";
+      }
+    }
+  }
+
+  function register_popup()
+  {
+    $('#preventClick').modal('hide');
+    var id = $('#adminchat').val();
+    var name   = $( "#adminchat option:selected" ).text();
+    console.log(name)
+    for(var iii = 0; iii < popups.length; iii++)
+    {   
+      if(id == popups[iii])
+      {
+        Array.remove(popups, iii);
+        popups.unshift(id);
+        calculate_popups();
+        return;
+      }
+    }               
+    if(!(document.getElementById(id)!=null && document.getElementById(id) !=undefined))
+    {
+      var element = '<div class="popup-box chat-popup" id="'+ id +'">';
+      element = element + '<div class="popup-head">';
+      element = element + '<div class="popup-head-left">'+ name +'</div>';
+      element = element + '<div class="popup-head-right"><a href="javascript:close_popup(\''+ id +'\');">✕</a></div>';
+      element = element + '<div style="clear: both"></div></div><div class="popup-messages"><div chatboxid="'+ id +'"  class="chat"></div><input size="35" chatboxid="'+ id +'" class="message" id="message_'+ id +'"></input><input chatboxid="'+ id +'" class="sendmsg" value="submit" type="submit"></input></div></div>';
+      $('body').append(element);    
+    }   
+    popups.unshift(id);
+    calculate_popups();
+    $('#message_'+ id).focus();    
+  }
+
+  function calculate_popups()
+  {
+    var width = window.innerWidth;
+    if(width < 540)
+    {
+      total_popups = 0;
+    }
+    else
+    {
+      width = width - 200;
+      total_popups = parseInt(width/320);
+    }
+    display_popups();
+  }*/            
+
+   $(document).ready(function(){
+
+            $("#search").keyup(function(){
+                getFilter();
+            });
+            $('.search'). hide();
+            //getFilter();
+
+
+            
+        });
+
+        $('select[name="orderStatus"]').change(function(){
+
+               getFilter();      
+            })
+</script>

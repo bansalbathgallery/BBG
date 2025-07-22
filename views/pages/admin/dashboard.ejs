@@ -1,0 +1,206 @@
+<%- include ('header') %>
+<%- include ('../../partials/sidebar') %>
+<section id="content">
+                <div class="container">
+                    <div class="block-header">
+                        <h2>Dashboard</h2>
+                    </div>
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-4 m-t-5" style="margin-left: 50%;">
+                                            <div class="input-group form-group">
+                                                <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
+                                                <div class="dtp-container fg-line">
+                                                    <input type='text' id="datepicker" class="form-control" placeholder="Select Year">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2 m-t-5"style="float: right;">
+                                            <div class="input-group form-group">
+                                                <button type="button" onclick="filterbyyear()"class="btn btn-success btn-sm hec-button">Filter by year</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="card-body">
+                            <div id="container1"></div>
+                        </div>
+                    </div>
+                    <div class="mini-charts">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="mini-charts-item bgm-cyan">
+                                    <div class="clearfix">
+                                        <div class="chart stats-bar"></div>
+                                        <div class="count">
+                                            <small>Total Order Value</small>
+                                            <h2>$ <%- data.totalSum %></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="mini-charts-item bgm-lightgreen">
+                                    <div class="clearfix">
+                                        <div class="chart stats-bar-2"></div>
+                                        <div class="count">
+                                            <small>Avarage Order Value</small>
+                                            <h2>$ <%- data.average %></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="mini-charts-item bgm-orange">
+                                    <div class="clearfix">
+                                        <div class="chart stats-line"></div>
+                                        <div class="count">
+                                            <small>Completed Order</small>
+                                            <h2><%- data.completedOrder %></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="mini-charts-item bgm-bluegray">
+                                    <div class="clearfix">
+                                        <div class="chart stats-line-2"></div>
+                                        <div class="count">
+                                            <small>Cancelled Order</small>
+                                            <h2><%- data.cancelledOrder %></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="mini-charts-item bgm-teal">
+                                    <div class="clearfix">
+                                        <div class="chart chart-pie stats-pie"></div>
+                                        <div class="count">
+                                            <small>Total Users</small>
+                                            <h2><%- data.Totaluser %></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="mini-charts-item bgm-red">
+                                    <div class="clearfix">
+                                        <div class="chart stats-line"></div>
+                                        <div class="count">
+                                            <small>Total Riders</small>
+                                            <h2><%- data.totalRiders %></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="mini-charts-item bgm-blue">
+                                    <div class="clearfix">
+                                        <div class="chart chart-pie stats-pie"></div>
+                                        <div class="count">
+                                            <small>Total Restaurants</small>
+                                            <h2><%- data.TotalRestaurant %></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="mini-charts-item bgm-pink">
+                                    <div class="clearfix">
+                                        <div class="chart stats-bar"></div>
+                                        <div class="count">
+                                            <small>New Restaurant Applications</small>
+                                            <h2><%- data.TotalRestaurantReq %></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+        </section>
+ </section>
+
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+ <script src="<%- config.BASEURL %>vendors/bower_components/flot/jquery.flot.pie.js"></script>
+ <script src="<%- config.BASEURL %>vendors/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+<script>
+   $(function() {
+            $('#hometab').addClass('active');
+            $('#hometab a[href^="<%- adminpath %>dashboard"]').addClass('active');
+        });
+          $(function() {
+        $('#datepicker').datetimepicker({
+            format: "YYYY",
+            viewMode: "years",
+        });
+    });
+            $(document).ready(function(){
+getYearlyRevenue();
+
+});
+    function getYearlyRevenue()
+    {
+        var val = $('#datepicker').val();
+        console.log(val);
+        if(val == "")
+        {
+            var year = moment().format('YYYY');
+        }else{
+            var year = val;
+        }
+        
+        $.ajax({
+            type: 'POST',
+            url: '<%- adminpath %>getYearlyRevenue',
+            dataType: 'json',
+            data: {'year':year},
+            success: function (response) {
+            console.log(response.body[0].data)
+                $('#container1').highcharts({
+
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: 'Yearly Revenue Statistics('+year+')'
+                    },
+                    xAxis: {
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Revenue ($)'
+                        }
+                    },
+                    plotOptions: {
+                        line: {
+                            dataLabels: {
+                                enabled: true
+                            },
+                            enableMouseTracking: false
+                        }
+                    },
+                    series: [{
+                        name: 'Commission',
+                        data: response.body[0].data
+                    }]
+                });
+            },
+        });
+
+
+    }
+    function filterbyyear()
+    {
+       getYearlyRevenue();
+    }
+ </script>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<body class="toggled sw-toggled">
+<header id="header" class="clearfix" data-current-skin="blue">
+  
+    <ul class="header-inner">
+        <li id="menu-trigger" data-trigger="#sidebar">
+          <div class="line-wrap">
+              <div class="line top"></div>
+              <div class="line center"></div>
+              <div class="line bottom"></div>
+          </div>
+        </li>
+
+      <li class="logo hidden-xs">
+          <a href="<%-adminpath%>">BBG Loyality Admin</a>
+      </li>
+
+    </ul>
+
+
+  <!-- Top Search Content -->
+    <div id="top-search-wrap">
+        <div class="tsw-inner">
+            <i id="top-search-close" class="zmdi zmdi-arrow-left"></i>
+            <input type="text">
+        </div>
+    </div>
+
+</header>
+
+<section id="main" data-layout="layout-1">
+  <aside id="sidebar" class="sidebar c-overflow">
+    <div class="profile-menu" id="userprofiletab">
+        <a href="<%- adminpath %>">
+          <% if(userInfo.logo1 == "") { %>
+            <div class="profile-pic">
+                <img src="<%- config.IMAGE_APPEND_URL %>img/profile-pics/1024px_1x.png" alt="">
+            </div>
+            <% }else{ %>
+            <div class="profile-pic">
+                <img src="<%- userInfo.logo1 %>" alt="">
+            </div>
+            <% } %>
+            <div class="profile-info">
+                Test
+
+                <i class="zmdi zmdi-caret-down"></i>
+            </div>
+        </a>
+
+        <ul class="main-menu" id="profiledrop">
+            <li id="profiletab">
+                <a href="<%- adminpath %>profile"> <i class="zmdi zmdi-account"></i> View Profile</a>
+            </li>
+            <li>
+                <a href="<%- adminpath %>logout"><i class="zmdi zmdi-time-restore"></i> Logout</a>
+            </li>
+        </ul>
+    </div>
+
+    <ul class="main-menu">
+         <li id="hometab">
+            <a href="<%- adminpath %>"><i class="zmdi zmdi-home"></i> Dashboard</a>
+        </li>
+        
+         <li id="customerTab">
+            <a href="<%- adminpath %>customer"><i class="zmdi zmdi-accounts-alt"></i> Customer Management</a>
+        </li>
+        
+        <li id="orderTab">
+          <a href="<%- adminpath %>orders"><i class="zmdi zmdi-shopping-cart"></i> Order Management</a>
+        </li>
+        <li id="paymentTab">
+          <a href="<%- adminpath %>payments"><i class="zmdi zmdi-balance-wallet"></i> Payments</a>
+        </li>
+        <li id="reviewTab">
+          <a href="<%- adminpath %>reviews"><i class="zmdi zmdi-layers"></i>Reviews Management</a>
+        </li>
+        <li id="settingTab">
+          <a href="<%- adminpath %>setting"><i class="zmdi zmdi-settings"></i>Setting</a>
+        </li>
+    </ul>
+</aside>
+<%- include ('../partials/scripts') %>

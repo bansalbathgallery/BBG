@@ -1,0 +1,188 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+<section id="content">
+<div class="container">
+<div class="card">
+    <div class="card-header">
+        <h2>Add Coupon</h2>
+    </div>
+    
+    <div class="card-body card-padding">
+        <form role="form" id="addCoupan" method="POST" enctype="multipart/form-data">
+            <input type="hidden"  name="parentId" id="parentId"   />
+            <div class="row">
+                <div class="col-sm-6">  
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <div class="fg-line">
+                                <input type="text" class="form-control" autocomplete="off" minlength="2" maxlength="30" id="name" name="name" placeholder="Name*">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-card-giftcard"></i></span>
+                        <div class="fg-line">
+                                <input type="text" autocomplete="off" class="form-control text-uppercase" minlength="2" maxlength="30" id="code" name="code" placeholder="PROMO CODE*">
+                        </div>
+                    </div>
+                    </br>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-money"></i></span>
+                        <div class="fg-line">
+                            <input  id="usageLimit" minlength="1" maxlength="3"  class="form-control input-mask" data-mask="000"  name="usageLimit"  placeholder="Usage Limit"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
+                        <div class="fg-line">    
+                            <div class="dtp-container fg-line">
+                                <input type='text' class="form-control" autocomplete="off" name="validupto" id="validupto" placeholder="valid UPTO*">
+                            </div>
+                        </div>
+                    </div>
+                    <br/> 
+                     <div class="col-sm-6">
+                    <div class="form-group fg-line col-md-6">
+                        <p class="f-500 c-black m-b-15">Choose file to upload Icon  <span class="c-red m-l-3" >*</span> </p>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>
+                            <div>
+                                <span class="btn btn-info btn-file">
+                                    <span class="fileinput-new">Upload Icon</span>
+                                    <span class="fileinput-exists">Change</span>
+                                    <input type="file" id="icon" name="icon">
+                                </span>
+                                <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                            </div>
+                        </div>
+                    </div>  
+                </div>      
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-money"></i></span>
+                        <div class="fg-line">
+                            <input  id="minimumAmount" minlength="1" maxlength="6"  class="form-control input-mask" data-mask="000000"  name="minimumAmount"  placeholder="Minimum Amount"/>
+                        </div>
+                    </div>
+                    <br/> 
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-money"></i></span>
+                        <div class="fg-line">
+                            <input  id="discount" minlength="1" maxlength="3"  class="form-control input-mask" data-mask="00"  name="discount"  placeholder="Discount (%)"/>
+                        </div>
+                    </div>
+                    <br/>
+                    
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-comments"></i></span>
+                        <div class="fg-line">    
+                            <div class="fg-line">
+                                <input type='text' class="form-control" minlength="10" maxlength="100" autocomplete="off" name="description" id="description" placeholder="Description">
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>   
+
+            </div>    
+            <div class="m-t-30 text-center">
+                <button class="btn btn-primary btn-sm waves-effect">Create</button>
+                <a href="<%- adminpath %>coupons"><button type="button" class="btn btn-link btn-sm waves-effect">Cancel</button></a>
+            </div> 
+        </form>
+    </section>
+</section>
+  <%- include ('../../../partials/scripts') %>
+  <%- include ('../../../partials/commonJs') %>
+<script type="text/javascript">
+$(function() {
+    $('#coupanTab').addClass('active');
+    $('#coupanTab a[href^="<%- adminpath %>coupons"]').addClass('active');
+});
+$('#validupto').datepicker({
+    minDate: new Date(),
+    autoclose: true,
+    changeMonth: true, 
+    changeYear: true,
+});
+
+       $('#addCoupan').validate({
+    ignore: ":hidden:not(select)",
+    rules: {
+      name: {
+        required: true,
+      },
+      code: {
+        required: true
+      },
+      minimumAmount: {
+        required: true
+      },
+      discount: {
+        required: true
+      },
+      usageLimit: {
+        required: true
+      },
+      validupto: {
+        required: true
+      },
+      icon: { required: true, accept: "image/jpg,image/jpeg,image/png"},
+    },
+    messages: {
+      email: {
+        required: "Please provide a name",
+      },
+      code: {
+        required: "Please provide a code"
+      },
+      minimumAmount: {
+        required: "Please provide a minimum amount"
+      },
+      discount: {
+        required: "Please provide a discount"
+      },
+      usageLimit: {
+        required: "Please select a usage limit"
+      },
+      validupto: {
+        required: "Please provide a validupto"
+      },
+      icon: {required: "This field is required", accept: 'Not an image!'},
+    },
+    submitHandler: function (form) {
+    $(".page-loader").show();
+    var tempform = $('#addCoupan');
+    var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+            url: '<%-adminpath%>coupons/add',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+                   showToastSuccess( response.message);
+                   $(".page-loader").hide();
+                   setTimeout(function(){ window.location.href="<%-adminpath%>coupons"; },2500);
+                
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+
+</script>
+
+
+ </body>
+</html>

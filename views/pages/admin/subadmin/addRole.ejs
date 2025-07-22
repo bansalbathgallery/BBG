@@ -1,0 +1,101 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+<section id="content">
+<div class="container">
+<div class="card">
+    <div class="card-header">
+        <h2>Add Sub Category</h2>
+    </div>
+    
+    <div class="card-body card-padding">
+        <form role="form" id="addCategory" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-sm-6">  
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <div class="fg-line">
+                          <input type="text" class="form-control" autocomplete="off" minlength="2" maxlength="30" id="name" name="name" placeholder="Name*">
+                        </div>
+                    </div>
+                    <br/>    
+                </div> 
+                <div class="col-sm-6">
+                    <select name="subjectId" id="subjectId" class="selectpicker" multiple title='Choose some roles'>
+                      <option value="">Select Roles </option> 
+                      <option value="0" >Manage Customers </option> 
+                      <option value="1" >Manage Riders </option> 
+                      <option value="2" >Manage Restaurants </option> 
+                      <option value="3" >Manage Orders </option> 
+                      <option value="4" >Manage Cuisines </option> 
+                    </select>
+                </div>   
+            </div>    
+            <div class="m-t-30 text-center">
+                <button class="btn btn-primary btn-sm waves-effect">Create</button>
+                <a href="<%- adminpath %>roles"><button type="button" class="btn btn-link btn-sm waves-effect">Cancel</button></a>
+            </div> 
+        </form>
+    </section>
+</section>
+  <%- include ('../../../partials/commonJs') %>
+<script type="text/javascript">
+
+$(function() {
+    $('.categoryTab').addClass('active toggled');
+    $('#categoryTab a').addClass('active');
+});
+
+
+
+  $('#addCategory').validate({
+    ignore: ":hidden:not(select)",
+    rules: {
+      name: {
+        required: true,
+      }, 
+      subjectId: {
+        required: true,
+      },
+    },
+    messages: {
+      name: {
+        required: "Please provide a name",
+      },
+      subjectId: {
+        required: "Please select role permission",
+      },
+    },
+    submitHandler: function (form) {
+    $(".page-loader").show();
+    var tempform = $('#addCategory');
+    var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+            url: '<%-adminpath%>/roles/postAdd',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+                   showToastSuccess( response.message);
+                   $(".page-loader").hide();
+                   setTimeout(function(){ window.location.href="<%-adminpath%>roles"; },2500);
+                
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+
+</script>
+
+
+ </body>
+</html>

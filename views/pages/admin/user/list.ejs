@@ -1,0 +1,150 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+    <section id="content">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <div class="pull-left"><h2>Customer List</h2></div>
+                </div>
+                <table id="data-table-command" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th data-column-id="id" data-visible="false">ID</th>
+                            <th data-column-id="name">Name</th>
+                            <th data-column-id="Status">Allowed</th>
+                            <th data-column-id="Phone">Phone No.</th>
+                            <th data-column-id="email" data-order="desc">Email Id</th>
+                            <th data-column-id="commands" data-formatter="commands" data-sortable="false">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var t=0;t<data.length;t++) { %>
+                            <tr>
+                                <td><%-data[t].id %></td>
+                                <td><%-data[t].firstName %> <%-data[t].lastName%> </td>
+                                <% if(data[t].status == '1'){ %>
+                                    <td>Active</td>
+                                <% }else{ %>
+                                    <td>Block</td>
+                                <% } %>
+                                <td>(+<%-data[t].countryCode %>) <%-data[t].phoneNumber %> </td>
+                                <td><%-data[t].email %> </td>
+                            </tr>
+                        <%}%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</section>
+<%- include ('../../../partials/commonJs') %>
+
+<script type="text/javascript">
+    $(function() {
+        $('#customerTab').addClass('active');
+        $('#customerTab a[href^="<%- adminpath %>customer"]').addClass('active');
+    });
+    $(document).ready(function(){
+        //Command Buttons
+        var grid = $("#data-table-command").bootgrid({
+            caseSensitive: false,
+            css: {
+                icon: 'zmdi icon',
+                iconColumns: 'zmdi-view-module',
+                iconDown: 'zmdi-expand-more',
+                iconRefresh: 'zmdi-refresh',
+                iconUp: 'zmdi-expand-less'
+            },
+            formatters: {
+                "commands": function(column, row) {
+                    if(row.Status == "Active")
+                    {
+                        var toggle = "<button type=\"button\" class=\"btn btn-danger waves-effect command-block\" data-row-id=\"" + row.id + "\">Block</button>";
+                    }else{
+                        var toggle = "<button type=\"button\" class=\"btn btn-primary waves-effect command-unblock\" data-row-id=\"" + row.id + "\">Active</button>";
+                    }
+                    return "<button type=\"button\" title=\"Chat History\" class=\"btn btn-icon command-chat waves-effect waves-circle\" data-row-id=\"" + row.id + "\"><span class=\"zmdi zmdi-comment-alt-text\"></span></button>" +
+                    "<button type=\"button\" title=\"View Orders\" class=\"btn btn-icon command-order waves-effect waves-circle\" data-row-id=\"" + row.id + "\"><span class=\"zmdi zmdi-view-carousel\"></span></button>" +
+                    toggle;
+                }
+            }
+        }).on("loaded.rs.jquery.bootgrid", function()
+        {
+            /* Executes after data is loaded and rendered */
+            grid.find(".command-order").on("click", function(e)
+            {
+                window.location.href="<%-adminpath%>customer/orderList/"+$(this).data("row-id");
+            }).end().find(".command-chat").on("click", function(e)
+            {
+                window.location.href="<%-adminpath%>customer/chat/"+$(this).data("row-id");
+            }).end().find(".command-block").on("click", function(e)
+            {
+                var id = $(this).data("row-id");
+                swal({   
+                    title: "Are you sure?",   
+                    text: "You want to block this customer!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Yes, Block it!",   
+                    cancelButtonText: "No, cancel!",   
+                }, function(isConfirm){   
+                    if (isConfirm) {    
+                        console.log(id);
+                        $.ajax({
+                            type: 'POST',
+                            url: '<%-adminpath%>customer/status/',
+                            data: {'id': id,'status': '0'},
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.code == '200') {
+                                   showToastSuccess("Customer block successfully");
+                                   //$(".page-loader").hide();
+                                   setTimeout(function(){ window.location.reload(); },1000);
+                                }
+                                else{
+                                   //$(".page-loader").hide();
+                                    showToastError(response.message)
+                                }
+                            }
+                        });    
+                    } 
+                });
+            }).end().find(".command-unblock").on("click", function(e)
+            {
+                var id = $(this).data("row-id");
+                swal({   
+                    title: "Are you sure?",   
+                    text: "You want to active this customer!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Yes, Active it!",   
+                    cancelButtonText: "No, cancel!",   
+                }, function(isConfirm){   
+                    if (isConfirm) {    
+                        console.log(id);
+                        $.ajax({
+                            type: 'POST',
+                            url: '<%-adminpath%>customer/status/',
+                            data: {'id': id,'status': '1'},
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.code == '200') {
+                                   showToastSuccess("Customer active successfully");
+                                   //$(".page-loader").hide();
+                                   setTimeout(function(){ window.location.reload(); },1000);
+                                }
+                                else{
+                                   //$(".page-loader").hide();
+                                    showToastError(response.message)
+                                }
+                            }
+                        });    
+                    } 
+                });
+            });
+        })
+    });
+</script>
+  

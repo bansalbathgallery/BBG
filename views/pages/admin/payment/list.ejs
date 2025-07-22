@@ -1,0 +1,120 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+
+    <section id="content">
+     <div class="container">
+        <div class="m-b-30">
+          <div class="block-header ">
+            <b>ORDER PAYMENT'S</b>
+          </div>
+        </div>
+      <div>
+            <div class="card">
+                <table id="data-table-command" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th data-column-id="id" data-visible="false">ID</th>
+                            <th data-column-id="OrderNo">Order No</th>
+                            <th data-column-id="Rname">Restaurant Name</th>
+                            <th data-column-id="rFees">Restaurant Earning ($)</th>
+                            <th data-column-id="AFees">Admin Earning ($)</th>
+                            <th data-column-id="commands" data-formatter="commands" data-sortable="false">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderData">
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </section>
+</section>
+  <%- include ('../../../partials/scripts') %>
+  <%- include ('../../../partials/commonJs') %>
+<script type="text/javascript">
+  $(function() {
+      $('#paymentTab').addClass('active');
+      $('#paymentTab a[href^="<%- adminpath %>payments"]').addClass('active');
+  }); 
+  var grid = $("#data-table-command").bootgrid({
+    caseSensitive: false,
+    css: {
+        icon: 'zmdi icon',
+        iconColumns: 'zmdi-view-module',
+        iconDown: 'zmdi-expand-more',
+        iconRefresh: 'zmdi-refresh',
+        iconUp: 'zmdi-expand-less'
+    },
+    formatters: {
+        "commands": function(column, row) {
+            return"<button type=\"button\" class=\"btn btn-icon command-eye waves-effect waves-circle\" data-row-id=\"" + row.id + "\"><span class=\"zmdi zmdi-eye\"></span></button>";
+        }
+    }
+  }).on("loaded.rs.jquery.bootgrid", function()
+  {
+      /* Executes after data is loaded and rendered */
+      grid.find(".command-eye").on("click", function(e)
+      {
+        window.location.href="<%-adminpath%>orders/details?orderId="+$(this).data("row-id");
+      });
+  })
+
+
+  function getFilter(currentPage)
+  {
+    currentPage=currentPage
+    var limit=50
+    $('#loading1').show()
+    var status="";
+    var fromDate="";
+    var toDate="";
+    $.ajax({
+        type: 'POST',
+        url: '<%- adminpath %>payments/list',
+        dataType: 'json',
+        data: {'fromDate':fromDate,'transactionStatus':status ,'toDate':toDate,'page':currentPage,'limit':limit},
+        success: function (response) {
+            console.log(response)
+            $('#loading1').hide()
+
+            if (response.code == '200') {
+              $('#orderData').html('')
+              var data1=response.body.data
+              var data=response.body.data.rows
+              dataList=data
+              setData(data)
+            }
+            else{
+                showToastError(response.message)
+            }
+        },
+
+        error :function(response)
+        {
+          $('#loading1').hide()
+          showToastError(response.message)
+        }
+    });
+  }
+    
+  
+  function setData(data)
+  {
+    var row= [];
+    $('#data-table-command').bootgrid('clear');
+    for(var t=0;t<data.length;t++)
+    {
+      row.push({
+        "id": data[t].id,
+        "OrderNo": data[t].orderNo,
+        "Rname": data[t].company.companyName,
+        "rFees": data[t].earning.restaurantFees,
+        "AFees": data[t].earning.adminFees,
+      })
+    }
+    grid.bootgrid('append',row);
+  }
+  var currentPage=1
+  getFilter(currentPage);
+</script>

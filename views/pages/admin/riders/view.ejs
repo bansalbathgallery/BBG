@@ -1,0 +1,164 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+ <section id="content">
+  			<form role="form" method="POST">
+                <div class="container">
+                    <div class="mt-details-tabs">
+					<ul class="tab-nav tn-justified">
+                        <li class="active waves-effect"><a href="#">Riders Details</a></li>
+                    </ul>
+					<div class="mt-details-tabs-content">
+					   <div class="row">
+					       <div class="col-sm-6">
+						      <div class="row">
+							     <div class="col-sm-4 col-xs-6">
+								    <label>Rider Name:</label>
+								 </div>
+								 <div class="col-sm-8 col-xs-6">
+								    <p><%- userData.firstName %> <%- userData.lastName %></p>
+								 </div>
+							  </div>
+							  <div class="row">
+							     <div class="col-sm-4 col-xs-6">
+								    <label>Email Address:</label>
+								 </div>
+								 <div class="col-sm-8 col-xs-6">
+								    <p><%- userData.email %></p>
+								 </div>
+							  </div>
+						   </div>
+						    <div class="col-sm-6">
+							   <div class="row">
+							     <div class="col-sm-4 col-xs-6">
+								    <label>Contact Number:</label>
+								 </div>
+								 <div class="col-sm-8 col-xs-6">
+								    <p>(+<%-userData.countryCode %>) <%-userData.phoneNumber %> </p>
+								 </div>
+							  </div>
+						   </div>
+					   </div>
+					   	
+					   	<div class="row">
+					     	<div class="col-sm-12">
+							   	<label>Rider Document</label>
+							   	<div class="mt-gallery-images">
+							      	<ul> 
+							      		
+										 <li><img src="<%- userData.idProof%>" style="height: 100%;"></li>
+										  	
+								  	</ul>
+							   	</div>
+						 	</div>
+					   	</div>
+					   	
+					   	<div class="row">
+						 	<div class="col-sm-12">
+							  <div class="row">
+							     <div class="col-sm-2 col-xs-6">
+								    <label>Bank Account Details:</label>
+								 </div>
+								 <div class="col-sm-8 col-xs-6">
+								    <p><%- userData.bankName %></p>
+								 </div>
+							  </div>
+						   </div>
+						    <div class="col-sm-12">
+						     
+							  <div class="row">
+							     <div class="col-sm-2 col-xs-6">
+								    <label>Bank Account Number:</label>
+								 </div>
+								 <div class="col-sm-8 col-xs-6">
+								    <p><%- userData.accountNumber %></p>
+								 </div>
+							  </div>
+						   </div>
+					   	</div>
+					   	<br/>
+					   	<br/>
+					   	<% if(vehices.length > 0){ %>
+					   	<p>Riders Vehicles</p>
+					   	<% } %>
+					   	<div class="contacts clearfix row">
+                          <% for(var i=0;i<vehices.length;i++){ %>
+                            <div class="col-md-2 col-sm-4 col-xs-6">
+                                <div class="c-item">
+                                    <a href="javascript:;" class="ci-avatar">
+                                        <% if(vehices[i].rcImage != ""){ %>
+                                          <img src="<%- vehices[i].rcImage %>" alt="">
+                                        <%}else{ %>
+                                          <img src="<%-config.IMAGE_APPEND_URL%>/img/contacts/1.jpg" alt="">
+                                        <% } %>
+                                    </a>
+                                    <div class="c-info">
+                                        <strong><%- vehices[i].name %></strong>
+                                        <small><%- vehices[i].regNumber %></small>
+                                    </div>
+                                </div>
+                            </div>
+                          <% } %>
+                        </div>
+
+					    <div class="row">
+					      	<div class="col-sm-12 text-center mt-details-aprove-buttons">
+							   <button type="button" onclick="changeStatus('<%= userData.id %>','1')"  class="btn btn-success btn-sm waves-effect">Approve</button>
+							   <button type="button" class="btn btn-danger waves-effect" onclick="changeStatus('<%= userData.id %>','2')">Disapprove</button>
+						   	</div>
+					   </div>
+					</div>
+					</div>
+                </div>
+                </form>
+            </section>
+</section>
+<%- include ('../../../partials/commonJs') %>
+<script type="text/javascript">
+ 	 $(function() {
+        $('#riderTab').addClass('active');
+        $('#riderTab a[href^="<%- adminpath %>riders"]').addClass('active');
+    });
+	function changeStatus(id,status)
+	{	
+		if(status == '1')
+		{
+			var warningMess = "You want to approved this rider";
+			var message = "Approved Successfully";
+		}else{
+			var warningMess = "You want to unapproved this rider";
+			var message = "Un-approved Successfully";
+		}	
+	    swal({   
+	        title: "Are you sure?",   
+	        text: warningMess,   
+	        type: "warning",   
+	        showCancelButton: true,   
+	        confirmButtonColor: "#DD6B55",   
+	        confirmButtonText: "Yes, Change Status!",   
+	        cancelButtonText: "No, cancel!",   
+	    }, function(isConfirm){   
+	        if (isConfirm) {    
+	            console.log(id);
+	            $.ajax({
+	              type: 'POST',
+	              url: '<%-adminpath%>riders/status',
+	              data: {'id': id,'status': status},
+	              dataType: 'json',
+	              success: function (response) {
+	                  if (response.code == '200') {
+	                     showToastSuccess( message);
+	                     setTimeout(function(){ 
+	                    window.location.href="<%- adminpath %>riders/requests"; 
+	                     },2500);
+	                  }
+	                  else{
+	                      showToastError(message)
+	                  }
+	              }
+	            });  
+	        } 
+	    });
+	}
+
+</script> </body>
+</html>

@@ -1,0 +1,208 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+<section id="content">
+<div class="container">
+<div class="card">
+                        <div class="card-header">
+                            <h2>Content Management</h2>
+                        </div>
+                        
+                        <div class="card-body card-padding">
+                            <div role="tabpanel">
+                                <ul class="tab-nav" role="tablist">
+                                     <li class="active"><a href="#push" aria-controls="push" role="tab" data-toggle="tab">Delivery Fees</a></li>
+                                    <li><a href="#settings11" aria-controls="settings11" role="tab" data-toggle="tab">Change Password</a></li>
+                                </ul>
+                              
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="push">
+
+                                     <form role="form" id="sendNotifications" method="POST" enctype="multipart/form-data">
+                                        <input type="hidden" value="3" name="flag">
+                                        <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                                <input value="<%- data.distancePerKm ? data.distancePerKm : '0' %>" type="text" id="distancePerKm" name="distancePerKm" class="input-sm form-control fg-input input-mask" data-mask="000000">
+                                                <label class="fg-label">Distance Per Km</label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                                <input type="text" value="<%- data.pickUpRate ? data.pickUpRate : '0' %>" id="pickUpRate" name="pickUpRate" class="input-sm form-control fg-input input-mask" data-mask="000000">
+                                                <label class="fg-label">Pick Up Commission</label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                                <input type="text" value="<%- data.deliveryRate ? data.deliveryRate : '0' %>" id="deliveryRate" name="deliveryRate" class="input-sm form-control fg-input input-mask" data-mask="000000">
+                                                <label class="fg-label">Delivery Commission</label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="m-t-30 text-center">
+                                          <button class="btn btn-primary btn-sm waves-effect">Done</button>
+                                        </div> 
+                                      </form>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="settings11">
+                                      <form role="form" id="privacyform" method="POST" enctype="multipart/form-data">
+                                       
+                                        <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                                <input type="password"  maxlength="60" id="oldPassword" name="oldPassword" class="input-sm form-control fg-input">
+                                                <label class="fg-label">Old Password</label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                                <input type="password"  maxlength="60" id="password" name="password" class="input-sm form-control fg-input">
+                                                <label class="fg-label">New Password</label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                                <input type="text" maxlength="60" id="password_confirm" name="password_confirm" class="input-sm form-control fg-input">
+                                                <label class="fg-label">Confirm New Password</label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="m-t-30 text-center">
+                                          <button class="btn btn-primary btn-sm waves-effect">Done</button>
+                                        </div> 
+                                      </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <br/>
+                            <br/>
+
+
+    </section>
+</section>
+  <%- include ('../../../partials/scripts') %>
+  <%- include ('../../../partials/commonJs') %>
+<script type="text/javascript">
+  $(function() {
+    $('#contentTab').addClass('active');
+    $('#contentTab a[href^="<%- adminpath %>content"]').addClass('active');
+  });
+
+  $('#privacyform').validate({
+    rules: {
+        oldPassword: {
+            required: true,
+            minlength: 5
+        }, 
+          password: {
+            required: true,
+            minlength: 5
+        },    
+        password_confirm: {
+            required: true,
+            minlength: 5,
+            equalTo: "#password"
+        }
+    },
+    messages: {
+        oldpassword: {
+            required: "Please enter password."
+        },
+        password: {
+            required: "Enter New Password",
+            minlength: "Password should be atleast six characters"
+        },
+        password_confirm: {
+            required: "Enter Confirm Password",
+            equalTo: "Confirm Password Should Be Same As New Password"
+        }
+    },
+    submitHandler: function (form) {
+      $(".page-loader").show();
+      var tempform = $('#privacyform');
+      var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+             url: '<%-adminpath%>/contents/updateChangePassword',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+              showToastSuccess( response.message);
+              $(".page-loader").hide();
+              
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+  
+
+  $('#sendNotifications').validate({
+    rules: {
+      distancePerKm: {
+        required: true,
+      },
+      pickUpRate: {
+        required: true,
+      },
+      deliveryRate: {
+        required: true,
+      }
+    },
+    messages: {
+      distancePerKm: {
+        required: "Please provide a distance per rate",
+      },
+      pickUpRate: {
+        required: "Please provide a pick up rate",
+      },
+      deliveryRate: {
+        required: "Please provide a delivery rate",
+      },
+    },
+    submitHandler: function (form) {
+      $(".page-loader").show();
+      var tempform = $('#sendNotifications');
+      var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+            url: '<%-adminpath%>/contents/updateSettings',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+              showToastSuccess( response.message);
+              $(".page-loader").hide();
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+
+
+
+</script>
+
+
+ </body>
+</html>

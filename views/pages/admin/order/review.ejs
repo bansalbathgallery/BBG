@@ -1,0 +1,238 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+<style type="text/css">
+ 
+</style>
+    <section id="content">
+    <div class="container">
+         <div class="m-b-30">
+          <div class="block-header ">
+            <b>Review Management</b>
+          </div>
+          </div>
+      <div>
+            <div class="card">
+                <div class="card-header">
+               <div class="rm-middle">
+                    <!--<div class="rm-middle-search-field">
+                       <input type="text" name="search" id="search" placeholder="Search by Rest Name" class="form-control"><i class="zmdi zmdi-search m-r-5"></i>
+                    </div>-->
+                  </div>
+                </div>
+                  <table id="data-table-command" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                          <th data-column-id="id" data-visible="false">ID</th>
+                          <th data-column-id="rating" data-formatter="ratings" data-sortable="false" data-visible="false">Rating</th>
+                          <th data-column-id="resta" data-formatter="restas" data-sortable="false">Restaurant Name</th>
+                          <th data-column-id="user" data-formatter="users" data-sortable="false">Customer Name</th>
+                          <th data-column-id="userR" data-formatter="userRs" data-sortable="false">Review By User</th>
+                          <th data-column-id="restaurantR" data-formatter="restaurantRs" data-sortable="false">Review By Restaurant</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderData">
+                      
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </section>
+</section>
+<%- include ('../../../partials/commonJs') %>
+        <script type="text/javascript">
+        $(function() {
+            $('#reviewTab').addClass('active');
+            $('#reviewTab a[href^="<%- adminpath %>reviews"]').addClass('active');
+        }); 
+          var grid = $("#data-table-command").bootgrid({
+                    caseSensitive: false,
+            
+                    css: {
+                        icon: 'zmdi icon',
+                        iconColumns: 'zmdi-view-module',
+                        iconDown: 'zmdi-expand-more',
+                        iconRefresh: 'zmdi-refresh',
+                        iconUp: 'zmdi-expand-less'
+                    },
+                    formatters: {
+                        "restas": function(column, row) {
+                            return "<a href=\"javascript:;\">"+row.resta+"</a>";
+                        },
+                        "users": function(column, row) {
+                            return "<a href=\"javascript:;\">"+row.user+"</a>";
+                        },
+                        "userRs": function(column, row) {
+                        console.log(row)
+                        var rating = row.rating;
+                        var avgRating = ""
+                        for(var k=0;k<5;k++)
+                        {
+                            if(rating-k>1){
+                                avgRating=  avgRating+'<i class="zmdi zmdi-star active"></i>';
+
+                            }else if (rating-k>0){ 
+                                avgRating=  avgRating+'<i class="zmdi zmdi-star active"></i>'
+                            }
+                            else{  
+                                avgRating=  avgRating+'<i class="zmdi zmdi-star"></i>'
+                            }
+                        }
+
+
+                            return " <div class=\"rating-list\"><div class=\"rl-star\">"+avgRating+" <br>"+row.userR+"</div></div>";
+                        },
+                        "restaurantRs": function(column, row) {
+                            return row.restaurantR;
+                        },
+                    }
+                }).on("loaded.rs.jquery.bootgrid", function()
+              {
+                /* Executes after data is loaded and rendered */
+                grid.find(".command-block").on("click", function(e)
+                {
+                    var id = $(this).data("row-id");
+                    $.ajax({
+                        type: 'POST',
+                        url: '<%-adminpath%>payment/status',
+                        data: {'id': id,'status': '2'},
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.code == '200') {
+                                   showToastSuccess( response.message);
+                                   //$(".page-loader").hide();
+                                   setTimeout(function(){ window.location.reload(); },2500);
+                            }
+                            else{
+                               //$(".page-loader").hide();
+                                showToastError(response.message)
+                            }
+                        }
+                    });  
+                    
+                }).end().find(".command-chat").on("click", function(e)
+                {
+                    var id = $(this).data("row-id");
+             
+                    $.ajax({
+                        type: 'POST',
+                        url: '<%-adminpath%>orders/details',
+                        data: {'orderId': id},
+                        dataType: 'json',
+                        success: function (response) {
+                        console.log(response)
+                            if (response.code == '200') {
+                            var data = response.data; 
+                                  $('#adminchat').html('');
+                                  var userIds = data.userId;
+                                  var companyId = data.companyId;
+                                  $('#adminchat').append(`<option value="${companyId}"> 
+                                    Chat with Restaurant 
+                                  </option>`);
+                                  $('#adminchat').append(`<option value="${userIds}"> 
+                                    Chat with Customer 
+                                  </option>`);
+                                  $('#preventClick').modal('show');
+                            }
+                            else{
+                               //$(".page-loader").hide();
+                                showToastError(response.message)
+                            }
+                        }
+                    });  
+                }).end().find(".command-unblock").on("click", function(e)
+                {
+                    var id = $(this).data("row-id");
+                    $.ajax({
+                        type: 'POST',
+                        url: '<%-adminpath%>payment/status',
+                        data: {'id': id,'status': '1'},
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.code == '200') {
+                                   showToastSuccess( response.message);
+                                   //$(".page-loader").hide();
+                                   setTimeout(function(){ window.location.reload(); },2500);
+                            }
+                            else{
+                               //$(".page-loader").hide();
+                                showToastError(response.message)
+                            }
+                        }
+                    });  
+                    
+                });
+            })
+
+
+function getFilter()
+    {
+        $('#loading1').show()
+        var fromDate="";
+        var toDate="";
+
+        //alert(fromDate)
+        $.ajax({
+            type: 'POST',
+            url: '<%- adminpath %>order/getAllReviewsFilter',
+            dataType: 'json',
+            data: {'fromDate':fromDate,'toDate':toDate},
+            success: function (response) {
+                console.log(response)
+                $('#loading1').hide()
+
+                if (response.code == '200') {
+
+                    $('#orderData').html('')
+                    var data1=response.body.data
+                    var data=response.body
+                    dataList=data
+                    setData(data)
+
+                }
+                else{
+                   
+                    showToastError(response.message)
+                }
+            },
+
+            error :function(response)
+            {
+                $('#loading1').hide()
+
+                showToastError(response.message)
+
+            }
+        });
+    }
+    
+  
+  function setData(data)
+  {
+    var row= [];
+    for(var t=0;t<data.length;t++)
+    {
+      if(data[t].restaurantReview != ""){
+       var rReview = data[t].restaurantReview;
+      }else{
+      var rReview = "";
+      }
+      row.push({
+        "id": data[t].id,
+        "rating": Math.round(data[t].rating),
+        "resta":data[t].company.companyName,
+        "user": data[t].user.firstName + ' ' +data[t].user.lastName,
+        "userR": data[t].review,
+        "restaurantR": rReview
+      })
+    }
+    grid.bootgrid('append',row);
+     
+  }
+  getFilter();
+  $(document).ready(function(){
+    $("#search").keyup(function(){
+        getFilter();
+    });
+  });
+</script>

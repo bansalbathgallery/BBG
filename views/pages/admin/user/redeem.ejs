@@ -1,0 +1,209 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+    <section id="content">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <div class="pull-left"><h2>PAYOUTS LIST</h2></div>
+                    <button style="float: right;margin-left: 10px;" class="btn btn-primary btn-sm m-t-10" id="sendMessage">Send Message</button>
+                </div>
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th><input name="select_all" value="1" id="example-select-all" type="checkbox" /></th>
+                            <th>Name</th>
+                            <th>Email Id</th>
+                            <th>Credit ($)</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var t=0;t<userList.length;t++) { %>
+                            <tr>
+                                <td><input type="checkbox"  value="<%= userList[t].user.email %>"></td>
+                                <td><%-userList[t].userDetail.fName %> <%-userList[t].userDetail.lName%> </td>
+                                <td><%-userList[t].user.email %></td>
+                                <td><%-userList[t].token %></td>
+                                <td><%-userList[t].status %></td>
+                                <td><%-userList[t].tokenAmount %> </td>
+                                <% if(userList[t].status == "Not Paid"){ %>
+                                    <td><a href="javascript:;" onclick="paidtoken('<%= userList[t].id %>')" id="tokenstatus" class="btn btn-primary btn-sm m-t-10" >Approve Redeemption</a></td>
+                                <% }else{ %>
+                                    <td></td>
+                                <% } %>
+                            </tr>
+                        <%}%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</section>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+                <form role="form" method="post" id="reused_form">
+ 
+                   <div class="form-group fg-line">
+                        <label for="message-text" class="col-form-label">Email:</label>
+                        <input type="text" class="form-control" id="seelctedusers" name="seelctedusers[]" readonly>
+                   </div>
+                  <div class="form-group fg-line">
+                    <label for="message-text" class="col-form-label">Message:</label>
+                    <textarea maxlength="200" class="form-control" name="message" id="message"></textarea>
+                  </div>
+                  <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Send message</button>
+          </div>
+                </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <%- include ('../../../partials/scripts') %>
+    <%- include ('../../../partials/commonJs') %>
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.bootstrap4.min.css">
+        
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript">
+    function paidtoken(id)
+    {
+        swal({   
+            title: "Are you sure?",   
+            text: "Are you sure you want to approve redeemption for this user!",   
+            type: "warning",   
+            showCancelButton: true,   
+            confirmButtonColor: "#DD6B55",   
+            confirmButtonText: "Yes, Confirm it!",   
+            cancelButtonText: "No, cancel!",   
+        }, function(isConfirm){   
+            if (isConfirm) {    
+                console.log(id);
+                $.ajax({
+                    type: 'POST',
+                    url: '<%-adminpath%>updateRedeemption',
+                    data      : {"redeemptionid":id},
+                    dataType  : 'json',
+                    success: function (response) {
+                        if (response.code == '200') {
+                               showToastSuccess( response.message);
+                               //$(".page-loader").hide();
+                               setTimeout(function(){ window.location.reload(); },1000);
+                        }
+                        else{
+                           //$(".page-loader").hide();
+                            showToastError(response.message)
+                        }
+                    }
+                });  
+            } 
+        });
+        
+    }
+        $(function() {
+            $('#apyoutTab').addClass('active');
+            $('#apyoutTab a[href^="<%- adminpath %>redeem"]').addClass('active');
+        });
+        $(document).ready(function(){
+            var table = $('#example').DataTable( {
+                lengthChange: false,
+                buttons: [ 'excel', 'pdf']
+            } );
+ 
+            table.buttons().container()
+            .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+
+            $('#example-select-all').on('click', function(){
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+            $('#sendMessage').click(function(){
+                var Email = [];
+                table.$('input[type="checkbox"]').each(function(){
+                    if ($(this).is(":checked")) {
+                        Email.push(this.value);
+                    } 
+                });
+                if(Email.length > 0){
+                    $('#seelctedusers').val(Email);
+                }else{
+                    swal({   
+                        title: "Please select a user",   
+                        type: "warning",   
+                        showCancelButton: true,   
+                        confirmButtonColor: "#DD6B55",   
+                        confirmButtonText: "Ok",   
+                        closeOnConfirm: false 
+                    });
+                    return false;
+                }
+                $('#exampleModal').modal('show');
+                $('#message-text').val('');
+            });
+            $("#reused_form").validate({
+                rules: {
+                    message: {
+                        required: true
+                    }
+                },
+                messages: {
+                    message: {
+                        required: "Please type message"
+                    }
+                },
+                submitHandler: function (form) {
+                        console.log($('#seelctedusers').val());
+                    $.ajax({
+                        type: 'POST',
+                        url: '<%-adminpath%>sendpayoutMail',
+                        dataType: 'json',
+                        data: {'email':$('#seelctedusers').val(),'message': $('#message').val()},
+                        success: function (response) {
+                            $(".overlay").hide();
+                            if (response.status == 200) {
+                                $.toast({
+                                    text: "Mail sent successfully.",
+                                    heading: 'Success',
+                                    icon: 'success',
+                                    showHideTransition: 'slide',
+                                    allowToastClose: true,
+                                    hideAfter: 5000,
+                                    stack: false, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                                    position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                                    textAlign: 'left',
+                                    loader: false,
+                                    loaderBg: '#9EC600'
+                                });
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 3000);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+</script>
+  

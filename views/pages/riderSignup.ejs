@@ -1,0 +1,244 @@
+<%- include ('admin/header') %>
+<body class="toggled sw-toggled">
+<header id="header" class="clearfix" data-current-skin="blue">
+  
+    <ul class="header-inner">
+        <li id="menu-trigger" data-trigger="#sidebar">
+          <div class="line-wrap">
+              <div class="line top"></div>
+              <div class="line center"></div>
+              <div class="line bottom"></div>
+          </div>
+        </li>
+
+      <li class="logo hidden-xs">
+          <a href="<%-adminpath%>">Secret Menu </a>
+      </li>
+
+    </ul>
+
+
+  <!-- Top Search Content -->
+    <div id="top-search-wrap">
+        <div class="tsw-inner">
+            <i id="top-search-close" class="zmdi zmdi-arrow-left"></i>
+            <input type="text">
+        </div>
+    </div>
+
+</header>
+
+<section id="main" data-layout="layout-1">
+
+<section id="content">
+
+<div class="container">
+<div class="card">
+    <div class="card-header">
+        <h2>Rider Signup</h2>
+    </div>
+    
+    <div class="card-body card-padding">
+        <form role="form" id="addCoupan" method="POST" enctype="multipart/form-data">
+        <input type="hidden" value="+91" autocomplete="off" minlength="2" maxlength="30" id="countryCode" name="countryCode">
+        <input type="hidden" value="web" autocomplete="off" minlength="2" maxlength="30" id="deviceType" name="deviceType" >
+        <input type="hidden" value="" autocomplete="off" minlength="2" maxlength="30" id="deviceToken" name="deviceToken" >
+            <div class="row">
+                <div class="col-sm-6">  
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <div class="fg-line">
+                          <input type="text" class="form-control" autocomplete="off" minlength="2" maxlength="30" id="firstName" name="firstName" placeholder="First Name*">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-card-giftcard"></i></span>
+                        <div class="fg-line">
+                          <input type="text" class="form-control" autocomplete="off" minlength="2" maxlength="60" id="password" name="password" placeholder="Password*">
+                        </div>
+                    </div>
+                    </br>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-money"></i></span>
+                        <div class="fg-line">
+                            <input type="email" class="form-control" autocomplete="off" minlength="2" maxlength="60" id="email" name="email" placeholder="Email*">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
+                        <div class="fg-line">    
+                            <div class="dtp-container fg-line">
+                                <input type='text' class="form-control" autocomplete="off" minlength="2" maxlength="60" name="bankName" id="bankName" placeholder="Bank Name*">
+                            </div>
+                        </div>
+                    </div>
+                    <br/> 
+                     <div class="col-sm-6">
+                    <div class="form-group fg-line col-md-6">
+                        <p class="f-500 c-black m-b-15">Choose file to upload Proof  <span class="c-red m-l-3" >*</span> </p>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>
+                            <div>
+                                <span class="btn btn-info btn-file">
+                                    <span class="fileinput-new">Upload Icon</span>
+                                    <span class="fileinput-exists">Change</span>
+                                    <input type="file" id="idProof" name="idProof">
+                                </span>
+                                <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                            </div>
+                        </div>
+                    </div>  
+                </div>      
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <div class="fg-line">
+                            <input type="text" class="form-control" autocomplete="off" minlength="2" maxlength="30" id="lastName" name="lastName" placeholder="Last Name*">
+                        </div>
+                    </div>
+                    <br/> 
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-money"></i></span>
+                        <div class="fg-line">
+                            
+                        <input type="text" class="form-control" autocomplete="off" minlength="2" maxlength="60" id="cpassword" name="cpassword" placeholder="Confirm Password*">
+                        </div>
+                    </div>
+                    <br/>
+                    
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-comments"></i></span>
+                        <div class="fg-line">    
+                            <div class="fg-line">
+                                <input  id="phoneNumber" minlength="1" maxlength="12"  class="form-control input-mask" data-mask="0000000000"  name="phoneNumber"  placeholder="Phone Number"/>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
+                        <div class="fg-line">    
+                            <div class="dtp-container fg-line">
+                                <input type='text' class="form-control" autocomplete="off" minlength="2" maxlength="60" name="accountNumber" id="accountNumber" placeholder="Account Number*">
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+
+            </div>    
+            <div class="m-t-30 text-center">
+                <button class="btn btn-primary btn-sm waves-effect">Create</button>
+                <a href="<%- adminpath %>coupons"><button type="button" class="btn btn-link btn-sm waves-effect">Cancel</button></a>
+            </div> 
+        </form>
+    </section>
+</section>
+  <%- include ('../partials/scripts') %>
+  <%- include ('../partials/commonJs') %>
+<script type="text/javascript">
+
+
+       $('#addCoupan').validate({
+    ignore: ":hidden:not(select)",
+    rules: {
+      firstName: {
+        required: true,
+      },
+      lastName: {
+        required: true,
+      },
+        password: {
+          required: true,
+          minlength: 5
+        },    
+        cpassword: {
+          required: true,
+          minlength: 5,
+          equalTo: "#password"
+        },
+      email: {
+        required: true
+      },
+      bankName: {
+        required: true
+      },
+      phoneNumber: {
+        required: true
+      },
+      accountNumber: {
+        required: true
+      },
+      idProof: { accept: "image/jpg,image/jpeg,image/png"},
+    },
+    messages: {
+      firstName:{
+        required: "Please provide a first name",
+      },
+      lastName:{
+        required: "Please provide a last name",
+      },
+      password: {
+        required: "Enter New Password",
+        minlength: "Password should be atleast five characters"
+      },
+      cpassword: {
+        required: "Enter Confirm Password",
+        equalTo: "Confirm Password Should Be Same As New Password"
+      },
+      email: {
+        required: "Please provide a name",
+      },
+      bankName: {
+        required: "Please provide a bankName"
+      },
+      phoneNumber: {
+        required: "Please select a usage limit"
+      },
+      accountNumber: {
+        required: "Please provide a validupto"
+      },
+      idProof: {accept: 'Not an image!'},
+    },
+    submitHandler: function (form) {
+    $(".page-loader").show();
+    var tempform = $('#addCoupan');
+    var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+            url: '<%-config.BASEURL%>api/rider/signup',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+            if(response.message == "Signup Successfully")
+            {
+                showToastSuccess( );
+                 $(".page-loader").hide();
+                 swal("Good job!","Rider Signup Successfully", "success");
+            }else{
+            $(".page-loader").hide();
+                showToastError(response.message)
+            }
+                 
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+
+</script>
+
+
+ </body>
+</html>

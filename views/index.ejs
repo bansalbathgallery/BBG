@@ -1,0 +1,91 @@
+
+    <!-- include header file-->
+    <%- include('components/header'); -%>
+
+    <main class="main-content">
+        <div class="ne-login-section">
+            <div class="container">
+             <div class="ne-login-form">
+                <div class="ne-login-form-left">
+                     <ul class="nav nav-tabs">
+                     <li class="nav-item">
+                         <a class="nav-link" data-toggle="tab" href="#signin">Sign In</a>
+                     </li>
+                     <li class="nav-item">
+                         <a class="nav-link active" data-toggle="tab" href="#register">Register</a>
+                     </li>
+                     </ul>
+                 <div class="tab-content">
+                 <div class="tab-pane container fade p-0" id="signin">
+                     <div class="ne-login-form-inner">
+                          <form method="post" id="loginForm" action="api/v1/login">
+                               <div class="form-group">
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <label>E-mail</label>
+                               </div>
+                              <div class="form-group">
+                                    <input type="password" class="form-control" name="password" id="password" required> 
+                                    <label>Password</label>
+                                    <i class="fa fa-eye-slash"></i>
+                               </div>
+                              <div class="form-group">
+                                   <a  class="login-form__forgot" href="#">Forgot password?</a>
+                              </div>
+                             <div class="form-group mb-0">
+                                  <button type="submit" class="btn">Login</button>
+                             </div>
+                          </form>
+                     </div>
+                 </div>
+                 <div class="tab-pane container active p-0" id="register">
+                        <div class="ne-login-form-inner">
+                          <form method="post" id="signUpForm" action="api/v1/signUp">
+                               <div class="form-group">
+                                    <input type="text" class="form-control" name="signUpEmail" id="signUpEmail">
+                                    <label>E-mail</label>
+                               </div>
+                              <div class="form-group">
+                                    <input type="password" class="form-control" name="signUpPassword" id="signUpPassword"> 
+                                    <label>Password</label>
+                                    <i class="fa fa-eye-slash"></i>
+                               </div>
+                             <div class="form-group">
+                                  <button type="submit" class="btn">Sign Up</button>
+                             </div>
+                             <div class="form-group mb-0">
+                             </div>
+                          </form>
+                     </div>
+                 </div>
+                 </div>
+                </div>
+             <div class="ne-login-form-right">
+                 <div  class="ne-banner__title">Сreate your first map!</div>
+                 <div  class="ne-banner__description">You will need:</div>
+                 <div class="ne-banner__features">
+                     <div class="ne-banner__features-inner">
+                          <div  class="ne-banner__feature--icon">
+                              <img  src="images/icon_digital_floor.png">
+                          </div>
+                         <div class="ne-banner__feature--name">Digital floor plan</div>
+                     </div>
+                     <div class="ne-banner__features-inner">
+                          <div  class="ne-banner__feature--icon">
+                              <img  src="images/icon_beacons.png">
+                          </div>
+                         <div class="ne-banner__feature--name">Beacons</div>
+                     </div>
+                 </div>
+                 <div class="ne-banner__text--bottom">We provide a FREE annual license for one location</div>
+             </div>
+             </div>
+            </div>
+        </div>
+  </main>
+
+   <!-- include footer file-->
+   <%- include('components/footer'); -%>
+
+   
+    <script src="/scripts/pages/auth.js"></script>
+    <script src="/scripts/common/helper.js"></script>

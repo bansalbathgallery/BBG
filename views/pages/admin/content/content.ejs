@@ -1,0 +1,364 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+<section id="content">
+<div class="container">
+<div class="card">
+                        <div class="card-header">
+                            <h2>Content Management</h2>
+                        </div>
+                        
+                        <div class="card-body card-padding">
+                            <div role="tabpanel">
+                                <ul class="tab-nav" role="tablist">
+                                    <li class="active"><a href="#home11" aria-controls="home11" role="tab" data-toggle="tab">Featured</a></li>
+                                    <li><a href="#push" aria-controls="push" role="tab" data-toggle="tab">Push Notifications</a></li>
+                                    <li><a href="#tc" aria-controls="tc" role="tab" data-toggle="tab">T&C</a></li>
+                                    <li><a href="#settings11" aria-controls="settings11" role="tab" data-toggle="tab">Privacy Statement</a></li>
+                                </ul>
+                              
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="home11">
+                                    <div class="btn-demo">
+                                      <a data-toggle="modal" href="#modalDefault" style="margin-bottom: 14px;" class="btn btn-success waves-effect">Add New Feature Type</a>
+                                  </div>
+                                    <% for(i=0;i<MainArray.length;i++){ %>
+                                      <div class="card bgm-gray">
+                                          <div class="card-header">
+                                              <h2><%- MainArray[i].type %></h2>
+                                          </div>
+                                          <div class="card-body table-responsive">
+                                              <table class="table table-striped">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>Restaurant Name</th>
+                                                          <th>Email Address</th>
+                                                          <th>Phone Number</th>
+                                                      </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                  <% var rest = MainArray[i].resturants; 
+                                                    for(ik=0;ik<rest.length;ik++){ 
+                                                  %>
+                                                      <tr>
+                                                        
+                                                          <td><%- rest[ik].companyName %></td>
+                                                          <td><%- rest[ik].email %></td>
+                                                          <td><%- rest[ik].phoneNumber %></td>
+                                                      </tr>
+                                                    <% } %>
+                                                  </tbody>
+                                              </table>
+                                          </div>
+                                          <a href="<%-adminpath%>feature/<%- MainArray[i].id %>" ><button type="submit" style="margin-left: 45%;" class="btn btn-primary btn-sm m-t-10 m-b-10">Add More</button></a>
+                                        </div>
+                                      <% } %>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="push">
+
+                                     <form role="form" id="sendNotifications" method="POST" enctype="multipart/form-data">
+                                        <label class="radio radio-inline m-r-20">
+                                          <input type="radio" id="userType" name="userType" value="0" checked>
+                                            <i class="input-helper"></i>  
+                                            All Customers
+                                        </label>
+                                        
+                                        <label class="radio radio-inline m-r-20">
+                                            <input type="radio" id="userType" name="userType" value="1">
+                                            <i class="input-helper"></i>  
+                                            All Restaurants
+                                        </label>
+                                        
+                                        <label class="radio radio-inline m-r-20">
+                                            <input type="radio" id="userType" name="userType" value="2">
+                                            <i class="input-helper"></i>  
+                                            All Riders
+                                        </label>
+                                        </br>
+                                        </br>
+                                        <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                                <input type="text" id="title" name="title" class="input-sm form-control fg-input">
+                                                <label class="fg-label">Title</label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <p class="c-black f-500 m-b-20">Description</p>
+                                        <div class="form-group">
+                                            <div class="fg-line">
+                                                <textarea class="form-control" id="description" name="description" rows="5" placeholder="Description"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="m-t-30 text-center">
+                                          <button class="btn btn-primary btn-sm waves-effect">Done</button>
+                                        </div> 
+                                      </form>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="tc">
+                                    <form role="form" id="termscondition" method="POST" enctype="multipart/form-data">
+                                      <input type="hidden" value="1" name="flag">
+                                       <p class="c-black f-500 m-b-20">Add Link</p>
+                                       <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                                <input type="text" value="<%- data.customerTerms ? data.customerTerms : "" %>" id="cterms" name="cterms" class="input-sm form-control fg-input">
+                                                <label class="fg-label">T&C- Customer</label>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                         <p class="c-black f-500 m-b-20">Add Link</p>
+                                     <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                            <input type="text" value="<%- data.restaurantTerms ? data.restaurantTerms : "" %>" id="rterms" name="rterms" class="input-sm form-control fg-input">
+                                                <label class="fg-label">T&C- Restaurant</label>
+                                                
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                         <p class="c-black f-500 m-b-20">Add Link</p>
+                                     <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                            <input type="text" value="<%- data.riderTerms ? data.riderTerms : "" %>" id="riderTerms" name="riderTerms" class="input-sm form-control fg-input">
+                                                <label class="fg-label">T&C- Rider</label>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="m-t-30 text-center">
+                                          <button class="btn btn-primary btn-sm waves-effect">Done</button>
+                                        </div> 
+                                      </form>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="settings11">
+                                      <form role="form" id="privacyform" method="POST" enctype="multipart/form-data">
+                                       <input type="hidden" value="2" name="flag">
+                                        <p class="c-black f-500 m-b-20">Add Link</p>
+                                         <div class="form-group fg-float">
+                                            <div class="fg-line">
+                                            <input type="text" value="<%- data.privacyPolicy ? data.privacyPolicy : "" %>" id="privacy" name="privacy" class="input-sm form-control fg-input">
+                                                <label class="fg-label">Privacy Policy</label>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="m-t-30 text-center">
+                                          <button class="btn btn-primary btn-sm waves-effect">Done</button>
+                                        </div> 
+                                      </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <br/>
+                            <br/>
+
+
+    </section>
+</section>
+<!-- Modal Default -->  
+  <div class="modal fade" id="modalDefault" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+          <form role="form" id="addNewFeature" method="POST" enctype="multipart/form-data">
+              <div class="modal-header">
+                  <h4 class="modal-title">Add New</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-sm-12">
+                      <div class="input-group fg-float">
+                          <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                          <div class="fg-line">
+                              <input type="text" name="featuretype" id="featuretype" maxlength="60" class="form-control">
+                              <label class="fg-label">Feature Type</label>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="submit" class="btn btn-link">Save</button>
+                  <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+              </div>
+              </form>
+          </div>
+      </div>
+  </div>
+  <%- include ('../../../partials/scripts') %>
+  <%- include ('../../../partials/commonJs') %>
+<script type="text/javascript">
+  $(function() {
+    $('#contentTab').addClass('active');
+    $('#contentTab a[href^="<%- adminpath %>content"]').addClass('active');
+  });
+
+  $('#privacyform').validate({
+    rules: {
+      privacy: {
+        required: true,
+      }
+    },
+    messages: {
+      privacy: {
+        required: "Please provide a privacy policy statement",
+      },
+    },
+    submitHandler: function (form) {
+      $(".page-loader").show();
+      var tempform = $('#privacyform');
+      var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+             url: '<%-adminpath%>/contents/updateSettings',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+              showToastSuccess( response.message);
+              $(".page-loader").hide();
+              
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+  
+  $('#addNewFeature').validate({
+    rules: {
+      featuretype: {
+        required: true,
+      }
+    },
+    messages: {
+      featuretype: {
+        required: "Please provide a type",
+      },
+    },
+    submitHandler: function (form) {
+      $(".page-loader").show();
+      var tempform = $('#addNewFeature');
+      var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+             url: '<%-adminpath%>/contents/addNewFeature',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+              showToastSuccess( response.message);
+              $(".page-loader").hide();
+              window.location.reload();
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+  $('#termscondition').validate({
+    rules: {
+      rterms: {
+        required: true,
+      },
+      cterms: {
+        required: true,
+      }
+    },
+    messages: {
+      rterms: {
+        required: "Please provide a restaurant conditions",
+      },
+      cterms: {
+        required: "Please provide a customer conditions",
+      },
+    },
+    submitHandler: function (form) {
+      $(".page-loader").show();
+      var tempform = $('#termscondition');
+      var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+            url: '<%-adminpath%>/contents/updateSettings',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+              showToastSuccess( response.message);
+              $(".page-loader").hide();
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+
+    $('#sendNotifications').validate({
+    rules: {
+
+      title: {
+        required: true,
+      },
+      description: {
+        required: true,
+      }
+    },
+    messages: {
+ 
+      title: {
+        required: "Please provide a notification title",
+      },
+      description: {
+        required: "Please provide a description",
+      },
+    },
+    submitHandler: function (form) {
+      $(".page-loader").show();
+      var tempform = $('#sendNotifications');
+      var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+            url: '<%-adminpath%>/contents/sendNotifications',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+              showToastSuccess( response.message);
+              $(".page-loader").hide();
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+
+</script>
+
+
+ </body>
+</html>

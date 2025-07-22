@@ -1,0 +1,90 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+    <section id="content">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <div class="pull-left"><h2><%- findData.firstName %> <%- findData.lastName %> Order List</h2></div>
+                    <div class="pull-right"><a href="<%- adminpath %>customer"><button class="btn btn-primary waves-effect">Back</button></a></div>
+                </div>
+                <table id="data-table-command" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th data-column-id="id" data-visible="false">ID</th>
+                             <th data-column-id="orderno">Order No</th>
+                            <th data-column-id="status">Order Status</th>
+                            <th data-column-id="date">Order Date</th>
+                            <th data-column-id="cname">Company Name</th>
+                            <th data-column-id="name">Customer Name</th>
+                            <th data-column-id="Status">Address</th>
+                         
+                            <th data-column-id="type">Order Type</th>
+                            <th data-column-id="amount">Amount</th>
+                            <th data-column-id="commands" data-formatter="commands" data-sortable="false">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var t=0;t<data.length;t++) { %>
+                            <tr>
+                             <td><%-data[t].id %></td>
+                                <td><%-data[t].orderNo %></td>
+                                
+                                <% var status = "Pending"; %>
+
+                                    <% if(data[t].progressStatus=="1") status="Accepted" %>
+                                    <% if(data[t].progressStatus=="2") status="Cancelled" %>
+                                    <% if(data[t].progressStatus=="3") status="Processing" %>
+                                    <% if(data[t].progressStatus=="4") status="Cancelled by restaurant" %>
+                                    <% if(data[t].progressStatus=="5") status="Completed" %>
+                                    <% if(data[t].progressStatus=="6") status="Rejected" %>
+                                    <% if(data[t].progressStatus=="7") status="Food Prepared" %>
+                                    <% if(data[t].progressStatus=="8") status="On the Way" %>
+                                %>
+                                <td><%=status %></td>
+                                <td><%-new Date(data[t].serviceDateTime) %></td>
+                                <td><%-data[t].company.companyName %></td>
+                                <td><%-data[t].user.firstName %> <%-data[t].user.lastName%> </td>
+                                <td><%-data[t].address %></td>
+                               
+                                <td><%-data[t].orderType %> </td>
+                                <td><%-data[t].totalOrderPrice %> </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</section>
+<%- include ('../../../partials/commonJs') %>
+
+<script type="text/javascript">
+    $(function() {
+        $('#customerTab').addClass('active');
+        $('#customerTab a[href^="<%- adminpath %>customer"]').addClass('active');
+    });
+    $(document).ready(function(){
+        //Command Buttons
+        var grid = $("#data-table-command").bootgrid({
+            css: {
+                icon: 'zmdi icon',
+                iconColumns: 'zmdi-view-module',
+                iconDown: 'zmdi-expand-more',
+                iconRefresh: 'zmdi-refresh',
+                iconUp: 'zmdi-expand-less'
+            },
+            formatters: {
+                "commands": function(column, row) {
+                    return"<button type=\"button\" class=\"btn btn-icon command-eye waves-effect waves-circle\" data-row-id=\"" + row.id + "\"><span class=\"zmdi zmdi-eye\"></span></button>";
+                }
+            }
+        }).on("loaded.rs.jquery.bootgrid", function()
+        {
+            grid.find(".command-eye").on("click", function(e)
+            {
+                window.location.href="<%-adminpath%>orders/details?orderId="+$(this).data("row-id");
+            })
+        });
+    });
+</script>
+  

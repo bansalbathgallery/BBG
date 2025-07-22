@@ -1,0 +1,226 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+<section id="content">
+<div class="container">
+<div class="card">
+                        <div class="card-header">
+                            <h2>Content Management</h2>
+                        </div>
+                        
+                        <div class="card-body card-padding">
+                        <input type="hidden" value="<%-featured.id%>" id="featuredValue">
+                            <div role="tabpanel">
+                                <ul class="tab-nav" role="tablist">
+                                     <li class="active"><a href="#push" aria-controls="push" role="tab" data-toggle="tab"><%- featured.featuresType %> Restaurants</a></li>
+                                    <li><a href="#settings11" aria-controls="settings11" role="tab" data-toggle="tab">Add More Restaurants</a></li>
+                                </ul>
+                              
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="push">
+
+                                    <div class="contacts clearfix row">
+                                
+                                      <% for(var i=0;i<restDetails.length;i++){ %>
+                                        <div class="col-md-2 col-sm-4 col-xs-6">
+                                            <div class="c-item">
+                                                <a href="" class="ci-avatar">
+                                                    <% if(restDetails[i].CompanyImages.length >0){ %>
+                                                      <img src="<%- restDetails[i].CompanyImages[0].picture %>" alt="">
+                                                    <%}else{ %>
+                                                      <img src="<%-config.IMAGE_APPEND_URL%>/img/contacts/1.jpg" alt="">
+                                                    <% } %>
+                                                </a>
+                                                <div class="c-info">
+                                                    <strong><%- restDetails[i].companyName %></strong>
+                                                    <small><%- restDetails[i].email %></small>
+                                                </div>
+                                                <div class="c-footer">
+                                                    <button type="button" value="<%- restDetails[i].id %>" class="waves-effect remove"><i class="zmdi zmdi-person-add"></i> Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      <% } %>
+                                    </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="settings11">
+                            
+                                            <div class="contacts clearfix row">
+                                                
+                                
+                                                <% for(var i=0;i<anotherRest.length;i++){ %>
+                                                        <div class="col-md-2 col-sm-4 col-xs-6">
+                                                            <div class="c-item">
+                                                                <a href="" class="ci-avatar">
+                                                                    <% if(anotherRest[i].CompanyImages.length >0){ %>
+                                                                      <img src="<%- anotherRest[i].CompanyImages[0].picture %>" alt="">
+                                                                    <%}else{ %>
+                                                                      <img src="<%-config.IMAGE_APPEND_URL%>/img/contacts/1.jpg" alt="">
+                                                                    <% } %>
+                                                                </a>
+                                                                <div class="c-info">
+                                                                    <strong><%- anotherRest[i].companyName %></strong>
+                                                                    <small><%- anotherRest[i].email %></small>
+                                                                </div>
+                                                                <div class="c-footer">
+                                                                    <button type="button" value="<%- anotherRest[i].id %>" class="waves-effect add"><i class="zmdi zmdi-person-add"></i> Add</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                      <% } %>
+                                
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <br/>
+                            <br/>
+
+
+    </section>
+</section>
+  <%- include ('../../../partials/scripts') %>
+  <%- include ('../../../partials/commonJs') %>
+<script type="text/javascript">
+  $(function() {
+    $('#contentTab').addClass('active');
+    $('#contentTab a[href^="<%- adminpath %>content"]').addClass('active');
+  });
+
+  $('#privacyform').validate({
+    rules: {
+        oldPassword: {
+            required: true,
+            minlength: 5
+        }, 
+          password: {
+            required: true,
+            minlength: 5
+        },    
+        password_confirm: {
+            required: true,
+            minlength: 5,
+            equalTo: "#password"
+        }
+    },
+    messages: {
+        oldpassword: {
+            required: "Please enter password."
+        },
+        password: {
+            required: "Enter New Password",
+            minlength: "Password should be atleast six characters"
+        },
+        password_confirm: {
+            required: "Enter Confirm Password",
+            equalTo: "Confirm Password Should Be Same As New Password"
+        }
+    },
+    submitHandler: function (form) {
+      $(".page-loader").show();
+      var tempform = $('#privacyform');
+      var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+             url: '<%-adminpath%>/contents/updateChangePassword',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+              showToastSuccess( response.message);
+              $(".page-loader").hide();
+              
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+  
+
+$(".remove").click(function() {
+    var fired_button = $(this).val();
+    var featuredValue = $('#featuredValue').val();
+    swal({   
+        title: "Are you sure you want to remove this?",  
+        type: "warning",   
+        showCancelButton: true,   
+        confirmButtonColor: "#DD6B55",   
+        confirmButtonText: "Yes, Remove it!",   
+        cancelButtonText: "No, cancel!",   
+        closeOnConfirm: false,   
+        closeOnCancel: true 
+    }, function(isConfirm){   
+        if (isConfirm) {     
+          $.ajax({
+            type: 'POST',
+             url: '<%-adminpath%>/contents/updateFeatured',
+            dataType: 'json',
+            data: {'flag':'1','id':featuredValue,'restId':fired_button},
+            success: function (response) {
+              console.log(response);
+              if (response.code == '200') {
+                showToastSuccess( response.message);
+                $(".page-loader").hide();
+               setTimeout(function(){  window.location.reload(); },2500);
+              }
+              else{
+                 $(".page-loader").hide();
+                  showToastError(response.message)
+              }
+            }
+          });
+        } 
+    });
+});
+$(".add").click(function() {
+    var fired_button = $(this).val();
+    var featuredValue = $('#featuredValue').val();
+    swal({   
+      title: "Are you sure you want to add this?",  
+      type: "warning",   
+      showCancelButton: true,   
+      confirmButtonColor: "#DD6B55",   
+      confirmButtonText: "Yes, Add it!",   
+      cancelButtonText: "No, cancel!",   
+      closeOnConfirm: false,   
+      closeOnCancel: true 
+    }, function(isConfirm){   
+      if (isConfirm) {     
+        $.ajax({
+          type: 'POST',
+          url: '<%-adminpath%>/contents/updateFeatured',
+          dataType: 'json',
+          data: {'flag':'2','id':featuredValue,'restId':fired_button},
+          success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+              showToastSuccess( response.message);
+              $(".page-loader").hide();
+             setTimeout(function(){  window.location.reload(); },2500);
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+        });
+      } 
+    });
+});
+
+
+</script>
+
+
+ </body>
+</html>

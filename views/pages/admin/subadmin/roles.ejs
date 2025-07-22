@@ -1,0 +1,63 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+    <section id="content">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <div class="pull-left"><h2>ROLES LIST</h2></div>
+                    <div class="pull-right"><a href="<%-adminpath%>roles/add"><button class="btn btn-primary waves-effect">Add Role</button></a></div>
+                </div>
+<table id="data-table-command" class="table table-striped table-vmiddle">
+	<thead>
+		<tr>
+            <th data-column-id="id" data-visible="false">ID</th>
+			<th data-column-id="code">Role Name</th>
+			<th data-column-id="commands" data-formatter="commands" data-sortable="false">Action</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<%for(var t=0;t<data.length;t++) { %>
+		<tr>
+            <td><%-data[t].id %></td>
+            <td><%-data[t].roleName %> </td>
+        </tr>
+        <% } %>
+	</tbody>
+	
+</table>
+            </div>
+        </div>
+    </section>
+</section>
+<script>
+$(function() {
+    $('.categoryTab').addClass('active toggled');
+    $('#categoryTab a').addClass('active');
+});
+$(document).ready(function(){
+//Command Buttons
+var grid = $("#data-table-command").bootgrid({
+    caseSensitive: false,
+    css: {
+        icon: 'zmdi icon',
+        iconColumns: 'zmdi-view-module',
+        iconDown: 'zmdi-expand-more',
+        iconRefresh: 'zmdi-refresh',
+        iconUp: 'zmdi-expand-less'
+    },
+    formatters: {
+        "commands": function(column, row) {
+            return "<button type=\"button\" class=\"btn btn-icon command-edit waves-effect waves-circle\" data-row-id=\"" + row.id + "\"><span class=\"zmdi zmdi-edit\"></span></button>" ;
+        }
+    }
+}).on("loaded.rs.jquery.bootgrid", function()
+{
+    /* Executes after data is loaded and rendered */
+    grid.find(".command-edit").on("click", function(e)
+    {
+        window.location.href="<%-adminpath%>roles/view/"+$(this).data("row-id");
+    });
+})
+});
+</script>

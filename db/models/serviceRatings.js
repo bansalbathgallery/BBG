@@ -1,0 +1,57 @@
+/* jshint indent: 2 */
+const common = require('../../helpers/common');
+
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('serviceRatings', {
+    id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    rating :
+    {
+      type: DataTypes.STRING(15),
+      allowNull: true,
+      defaultValue: "0"
+    },
+    review :
+    {
+      type: DataTypes.TEXT(),
+      allowNull: true,
+      defaultValue: ""
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id'
+       },
+       onUpdate: 'CASCADE',
+       onDelete: 'CASCADE',
+    },
+    serviceId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'services',
+        key: 'id'
+       },
+       onUpdate: 'CASCADE',
+       onDelete: 'CASCADE',
+    },
+    orderId: {
+      type: DataTypes.UUID,
+      allowNull: true
+    },
+    createdAt: {
+      type: DataTypes.DATE(),
+      allowNull: false,
+      defaultValue: new Date()
+    },
+  }, {
+    tableName: 'serviceRatings',
+    timestamps: false
+  });
+};

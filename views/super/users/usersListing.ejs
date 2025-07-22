@@ -1,0 +1,227 @@
+<!-- AUI Framework -->
+<!DOCTYPE html>
+    <html>
+   <%-include ('../partials/header')%>
+    <body style="overflow: hidden;">
+        
+
+       
+
+        <div id="page-wrapper" class="demo-example">
+
+           
+
+            <!-- #page-header -->
+
+            <%-include ('../partials/side_bar')%>
+            <!-- #page-sidebar -->
+            <div id="page-content-wrapper">
+                <div id="page-title">
+
+<h3>
+    <div class="bg-gray text-transform-upr font-size-15 font-bold primary-font pad10A">Customers Listing</div>
+    
+</h3>
+</div><!-- #page-title -->
+<div id="page-content">
+
+
+<%-include ('../partials/flashMessage')%>
+
+<table class="table" id="example1">
+	<thead>
+		<tr>
+            <th>Name</th>
+            <th>Image</th>
+			<th>Phone Number</th>
+			<th>address</th>
+            <th>Platform</th>
+            <th  > Registered At</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<%for(var t=0;t<data.length;t++) {
+            
+            %>
+		<tr>
+            <td><%-data[t].firstName %> <%-data[t].lastName%> </td>
+            <td> <img src="<%-data[t].image %>" alt="" width="50" height="50"/>
+			<td><%-data[t].countryCode %> <%-data[t].phoneNumber %>  </td>
+			<td><%-data[t].address %> </td>
+			<td><%-data[t].platform %> </td>
+            <td><%-commonMethods.format(new Date(data[t].createdAt*1000)) %> </td>
+            <td>
+             <a href="javascript:;"   <%if(data[t].status==0){%> style="display:none" <%}%>  id="block_status_<%-data[t].id%>"   onclick="StatusChange('<%= data[t].id %>','1')"  class="btn small  bg-green  ">
+                <span class="button-content">
+                    <i class="glyph-icon icon-cog float-left"></i>
+                   Block &nbsp;&nbsp;&nbsp;
+                </span>
+            </a>
+            <a href="javascript:;"   <%if(data[t].status==1){%> style="display:none" <%}%>  id="unblock_status_<%-data[t].id%>"   onclick="StatusChange('<%= data[t].id %>','0')"  class="btn small  bg-red  ">
+                <span class="button-content">
+                    <i class="glyph-icon icon-ban-circle float-left"></i>
+                   Unblock 
+                </span>
+            </a>
+
+
+            <div class="dropdown">
+                <a href="javascript:;" title="" class="btn small bg-blue" data-toggle="dropdown">
+                    <span class="button-content">
+                        <i class="glyph-icon font-size-11 icon-cog"></i>
+                        <i class="glyph-icon font-size-11 icon-chevron-down"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu float-right">
+
+                    <li class="divider"></li>
+                    <li>
+                        <a onclick="return confirm('Are you sure you want to delete this?');"  href="<%-superadminpath%>customer/delete/<%= data[t].id %>"  class="font-red" title="">
+                            <i class="glyph-icon icon-remove mrg5R"></i>
+                            Delete
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+
+<!-- 
+            <a href="javascript:;"  id="block_status_<%-data[t].id%>"   onclick="StatusChange('<%= data[t].id %>','<%-data[t].status%>')"  class="btn small  <%-data[t].status==1?'bg-green' :'bg-orange' %> ">
+                <span class="button-content">
+                    <i class="glyph-icon icon-cog float-left"></i>
+                    <%-data[t].status==1?'Block &nbsp;&nbsp;&nbsp; ' :'Unblock' %>
+                </span>
+            </a> -->
+
+
+            </td>		
+        </tr>
+		<%}%>
+		
+	</tbody>
+	
+</table>
+
+
+                	</div><!-- #page-content -->
+            </div><!-- #page-main -->
+        </div><!-- #page-wrapper -->
+
+    </body>
+</html>
+
+
+<script type="text/javascript">
+   
+   $("#countryCode").intlTelInput({ initialCountry:"in",
+ });
+var input = document.querySelector("#countryCode");
+input.addEventListener("countrychange",function() {
+$("#countryCode").val($("#countryCode").intlTelInput("getSelectedCountryData").dialCode);
+ 
+});
+
+      $('#adduser').submit( function() {
+
+            var tempform = $('#adduser');
+            
+            tempform .parsley('validate' );
+
+            if(tempform.parsley('isValid' ))
+            {
+            var form_data = new FormData(tempform[0]);
+            $('#loading1').show()
+            $.ajax({
+                type: 'POST',
+                url: '<%-superadminpath%>customer/adduser',
+                dataType: 'json',
+                data: form_data,
+                contentType:false,
+                cache:false,
+                processData:false,
+                success: function (response) {
+                    $('#loading1').hide()
+                    if (response.code == 200) {
+                  
+                        showToastSuccess(response.message)
+
+                         window.location.href="<%-superadminpath%>customer";
+                       
+                    } else {
+                        showToastError(response.message)
+                    }
+                },
+
+                error: function(response)
+                {
+                    $('#loading1').hide()
+                   var errorResponse=JSON.parse(response.responseText)
+                   showToastError(errorResponse.message)
+
+
+                }
+            });
+        }
+      });
+    
+  
+    </script>
+
+<script>
+
+
+    function StatusChange(id,status)
+    {
+
+        var confirm1= (status=="1") ? "Block" : "Unblock"
+        if( confirm('Are you sure you want to '+confirm1+' this?'))
+        {
+        $.ajax({
+            type: 'POST',
+            url: '<%-superadminpath%>customer/status',
+            dataType: 'json',
+            data: {'id':id,'status':status},
+            success: function (response) {
+                if (response.code == '200') {
+                   // $('#block_status_'+id).html('');
+
+                    if(status == "1")
+                    {
+                       $('#block_status_'+id).hide()
+                       $('#unblock_status_'+id).show()
+                       showToastSuccess( "Customer blocked successfully")
+
+
+
+                    }else{
+                         
+                         $('#block_status_'+id).show()
+                        $('#unblock_status_'+id).hide()
+                       // $('#block_status_'+id).append("<i  class='fa fa-truck'  aria-hidden='true'></i>")
+                       showToastSuccess( "Customer unblocked successfully")
+
+                    }
+                    
+                }
+                else{
+                   
+                    showToastError(response.message)
+                }
+            },
+
+            error :function(response)
+            {
+                showToastError(response.message)
+
+            }
+        });
+    }
+    }
+   
+ 
+    
+
+</script>

@@ -1,0 +1,341 @@
+<%- include ('../header') %>
+<%- include ('../../../partials/sidebar') %>
+<style>
+.progressbar {
+  margin-bottom: 30px;
+  margin-top: 10px;
+  counter-reset: step;
+  clear: both;
+  list-style: none;
+}
+.progressbar li {
+  text-align: center;
+}
+.progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 25px;
+  line-height: 25px;
+  display: block;
+  font-size: 12px;
+  color: transparent;
+  border: 6px solid #ececec;
+  background: #27ae60;
+  border-radius: 19px;
+}
+
+
+.progress-payment li {
+  width: 50%;
+}
+.progressbar li.active:after,
+.progressbar li.active:before {
+  background: #27ae60;
+  color: white;
+}
+
+.progressbar li.complete:after {
+  background: #27ae60;
+}
+
+</style>
+ <section id="content">
+           <div class="container">
+          <div class="block-header sm-order-details-header">
+                        <h2>Order Detail</h2>
+            <!--<a href="#" class="btn btn-primary waves-effect">Change Status</a>-->
+                </div>
+        <div class="row">
+           <div class="col-md-4">
+              <div class="card  sm-order-top-left">
+              <div class="card-header">
+              <h2>Track Order</h2>
+              </div>
+              <div class="card-body">
+                 <div class="row">
+                  <div class="col-md-6">
+                   <h4>Order ID:</h4>
+                   <p><%-data.orderNo%></p>
+                </div>
+                <div class="col-md-6">
+                   <h4>Order Accepted By:</h4>
+                   <p><%-data.acceptedBy%></p>
+                </div>
+                <div class="col-md-6">
+                   <h4>Order Date:</h4>
+                   <p><%-commonMethods.format(new Date(data.serviceDateTime)) %></p>
+                </div>
+                <div class="col-md-6">
+                   <h4>Order Type:</h4>
+                   <p><%-data.orderType %></p>
+                </div>
+               </div>
+               <ul class="sm-order-left-details progressbar">
+                  <li class="completed">
+                    <h5 style="margin-right: 40%;margin-top: -24px;margin-bottom: 24px;">Pending</h5>
+                  </li>
+                  <% if(data.progressStatus == '6'){%>
+                    <li class="completed active">
+                      <h4 style="margin-right: 40%;margin-top: -24px;margin-bottom: 24px;">Rejected</h4>
+                    </li>
+                  <% }else if(data.progressStatus == '2' || data.progressStatus == '4'){ %>
+                    <li class="completed active">
+                      <h4 style="margin-right: 40%;margin-top: -24px;">Order Cancelled</h4>
+                    </li>
+                  <% }else{ %>
+
+                    <%for(var k=0;k<orderS.length;k++)
+                      {
+                        var className="completed"
+                        var dotName=""
+                        if( (data.progressStatus) >=  ( orderS[k].id))
+                        className='completed'
+                        
+                        if( data.progressStatus ==  orderS[k].id)
+                           dotName="active"
+                        %>
+                      <li class="<%-className+' '+dotName%>">
+                          <h5 style="margin-right: 40%;margin-top: -24px;margin-bottom: 24px;"><%-orderS[k].statusName%></h5>
+                      </li>
+                    <%}%>  
+
+                  <%}%>
+                  
+                  
+               </ul>
+              </div>
+            </div>
+           </div>
+           <div class="col-md-8">
+             <div class="card  sm-order-top-left">
+             <div class="card-header">
+                <h2>Items From Order <%-data.orderNo%></h2>
+             </div>
+             <div class="card-body">
+             <div class="table-responsive">
+               <table class="table table-striped">
+                <thead>
+                 <tr>
+                    <th>Service Name</th>
+                    <th>Icon</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                 </tr>
+              </thead>
+              <tbody>
+                <% for(var i=0;i<data.suborders.length;i++){ %>
+                  <tr>
+                    <td><%- data.suborders[i].ServiceName %></td>
+                    <td><img style="height: 50px;" src="<%- config.IMAGE_APPEND_URL+'services/icons/' %><%- data.suborders[i].icon %>"></td>
+                    <td><%- data.suborders[i].quantity %></td>
+                    <td><%- data.suborders[i].Serviceprice %></td>
+                    <td><%- data.suborders[i].price %></td>
+                  </tr>
+                 <% } %>
+                 <tr>
+                   <td colspan="4" class="text-right"><b>Sub Total:</b></td>
+                 <td><%- data.totalAmount %></td>
+                 </tr>
+                 <tr>
+                   <td colspan="4" class="text-right"><b>Delivery Charge:</b></td>
+                 <td><%- data.serviceCharges %></td>
+                 </tr>
+                 <tr>
+                   <td colspan="4" class="text-right"><b>Promo Code:</b></td>
+                 <td><%- data.promoCode %></td>
+                 </tr>
+                 <tr>
+                   <td colspan="4" class="text-right"><b>Discount Price:</b></td>
+                 <td><%- data.discountPrice %></td>
+                 </tr>
+                 
+                 <tr>
+                   <td colspan="4" class="text-right"><b>Total:</b></td>
+                 <td><%- data.payableAmount %></td>
+                 </tr>
+              </tbody>
+             </table>
+            </div>
+             </div>
+           </div>
+           </div>
+        </div>
+        <div class="row">
+           <div class="col-md-4">
+            <div class="card  sm-order-top-left">
+              <div class="card-header">
+              <h2>Shipping Information:</h2>
+              </div>
+              <div class="card-body sm-order-contact-details">
+                 <h4><%-data.user.firstName + ' ' +data.user.lastName%></h4>
+               <p>Address:<%-data.user.address %></p>
+               <p>Mobile Number: <%- '('+data.user.countryCode+') '+data.user.phoneNumber %></p>
+              </div>
+            </div>
+           </div>
+           <div class="col-md-4">
+            <div class="card  sm-order-top-left">
+              <div class="card-header">
+              <h2>Billing Information:</h2>
+              </div>
+              <div class="card-body sm-order-contact-details">
+               <div class="row">
+                  <div class="col-md-6">
+                   <p><b>Payment Mode:</b></p>
+                </div>
+                <div class="col-md-6">
+                   <p><%-data.payment.paymentMode ? data.payment.paymentMode: "" %></p>
+                </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6">
+                   <p><b>Transaction Id:</b></p>
+                </div>
+                <div class="col-md-6">
+                    <%-data.payment.transactionId ? data.payment.transactionId: "" %>
+                </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6">
+                   <p><b>Transaction Status:</b></p>
+                </div>
+                <div class="col-md-6">
+                  <p>Paid</p> 
+                </div>
+               </div>
+              </div>
+            </div>
+           </div>
+           <div class="col-md-4">
+            <div class="card  sm-order-top-left">
+              <div class="card-header">
+              <h2>Rider Information:</h2>
+              </div>
+                <div class="card-body sm-order-contact-details">
+                <% if(data.assignedEmployee){%>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p><b>Rider Name:</b></p>
+                    </div>
+                    <div class="col-md-6">
+                      <p><%-data.assignedEmployee.employee.firstName + ' ' +data.assignedEmployee.employee.lastName%></p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p><b>Rider Phone Number:</b></p>
+                    </div>
+                    <div class="col-md-6">
+                      <%-data.assignedEmployee.employee.countryCode + ' ' +data.assignedEmployee.employee.phoneNumber%>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p><b>Rider Email Address:</b></p>
+                    </div>
+                    <div class="col-md-6">
+                      <p><%-data.assignedEmployee.employee.email%></p> 
+                    </div>
+                  </div>
+                <% }else{ %>
+                <p>Not Assigned Yet</p>
+                <%} %>
+              </div>
+            </div>
+           </div>
+        </div>
+         </div>
+       </section>
+  <%- include ('../../../partials/scripts') %>
+  <%- include ('../../../partials/commonJs') %>
+<script type="text/javascript">
+$(function() {
+    $('#orderTab').addClass('active');
+    $('#orderTab a[href^="<%- adminpath %>orders"]').addClass('active');
+});
+$('#validupto').datepicker({
+    minDate: new Date(),
+    autoclose: true,
+    changeMonth: true, 
+    changeYear: true,
+});
+
+       $('#addCoupan').validate({
+    ignore: ":hidden:not(select)",
+    rules: {
+      name: {
+        required: true,
+      },
+      code: {
+        required: true
+      },
+      minimumAmount: {
+        required: true
+      },
+      discount: {
+        required: true
+      },
+      usageLimit: {
+        required: true
+      },
+      validupto: {
+        required: true
+      },
+      icon: { required: true, accept: "image/jpg,image/jpeg,image/png"},
+    },
+    messages: {
+      email: {
+        required: "Please provide a name",
+      },
+      code: {
+        required: "Please provide a code"
+      },
+      minimumAmount: {
+        required: "Please provide a minimum amount"
+      },
+      discount: {
+        required: "Please provide a discount"
+      },
+      usageLimit: {
+        required: "Please select a usage limit"
+      },
+      validupto: {
+        required: "Please provide a validupto"
+      },
+      icon: {required: "This field is required", accept: 'Not an image!'},
+    },
+    submitHandler: function (form) {
+    $(".page-loader").show();
+    var tempform = $('#addCoupan');
+    var form_data = new FormData(tempform[0]);
+      $.ajax({
+            type: 'POST',
+            url: '<%-adminpath%>coupons/update',
+            dataType: 'json',
+            data: form_data,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function (response) {
+            console.log(response);
+            if (response.code == '200') {
+                   showToastSuccess( response.message);
+                   $(".page-loader").hide();
+                   setTimeout(function(){ window.location.href="<%-adminpath%>coupons"; },2500);
+                
+            }
+            else{
+               $(".page-loader").hide();
+                showToastError(response.message)
+            }
+          }
+      });
+    }
+  });
+
+</script>
+
+
+ </body>
+</html>

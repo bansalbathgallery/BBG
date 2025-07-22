@@ -1,0 +1,161 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>CereKart </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body style=" width: 600px; margin: 0 auto; padding:0;   background: #FAFAFA; font-family: Arial;">
+    <!-- main table -font-family: Arial; -->
+    <table style="    font-size: 15px; margin: 0 auto; background: #F1F1F1;
+    padding: 20px;" cellpadding="0"
+        cellspacing="0">
+        <!---------------------------- row one ------------------------------------>
+        <tr>
+            <td style=" padding: 0px 15px 20px; text-align: center">                
+                <img src="greenlogo.png" alt="logo" />
+            </td>
+        </tr>
+        <!---------------------------- row 2 ------------------------------------>
+        <tr style="background: #fff;">
+            <td style="padding: 10px 30px 10px">
+                <p style="font-weight: 600;font-style: normal; font-size: 22px; line-height: 18px; color: #07595D;
+                text-align: center;">Hello</p>                
+            </td>
+        </tr>
+
+        <tr style="background: #07595D;">
+            <td style="padding: 30px 30px 30px">
+                <img style="display: flex; margin: 0 auto; text-align:center" src="ThankYou.png" alt="logo" />
+                <p style="font-style: normal; font-weight: bold; font-size: 20px; line-height: 30px; color: #fff; text-align: center;">for ordering CereKart. Share your ordering experience <a href="#" style="color: orange; text-decoration: none;">here</a> with us.</p>
+                
+            </td>
+        </tr>
+        
+        <tr style="background: #fff;margin-top: 10px; display: block; padding: 15px 30px 10px;">
+            <td style="border-bottom: 1px solid #EDEDED; width: 100%; display: inherit;">
+                <h4 style="font-style: normal; font-weight: normal; font-size: 16px; line-height: 28px;
+                color: rgba(0, 0, 0, 0.5); margin: 0px; margin-bottom: 10px; display: inline-block; width: 49%;">Your order ID</h4>
+                <p style="font-style: normal; font-weight: bold;font-size: 16px; line-height: 28px; color: #000000;
+                opacity: 0.8;; margin: 0px;margin-bottom: 5px; display: inline-block;"><%-orderNo%></p>                
+            </td>
+        </tr>
+        <tr style="background: #fff;display: block; padding: 5px 30px 10px;">
+            <td style="border-bottom: 1px solid #EDEDED; width: 100%; display: inherit;">
+                <h4 style="font-style: normal; font-weight: normal; font-size: 16px; line-height: 28px;
+                color: rgba(0, 0, 0, 0.5); margin: 0px; margin-bottom: 10px; display: inline-block; width: 49%; margin-bottom: 15px;">Order Date</h4>
+                <p style="font-style: normal; font-weight: bold;font-size: 16px; line-height: 28px; color: #000000;
+                opacity: 0.8;; margin: 0px;margin-bottom: 5px; display: inline-block;"><%-commonMethods.format(new Date(createdAt))%></p>                
+            </td>
+        </tr>
+
+        <tr style="background: #fff;display: block; padding: 5px 30px 10px;">
+            <td style="width: 100%; display: inherit;">
+                <h4 style="font-style: normal; font-weight: normal; font-size: 16px; line-height: 28px;
+                color: rgba(0, 0, 0, 0.5); margin: 0px; margin-bottom: 10px; display: inline-block; width: 49%;margin-bottom: 15px;">Status</h4>
+                <p style="font-style: normal; font-weight: bold;font-size: 16px; line-height: 28px; color: #000000;
+                opacity: 0.8;; margin: 0px;margin-bottom: 5px; display: inline-block;"><%- orderStatus.statusName %></p>                
+            </td>
+        </tr>
+
+        <tr style="background: #fff; display: block; margin-top: 20px;">
+            <td style="width: 20%; margin-right: 20px;padding: 20px 30px 15px;">
+                <img style="border-radius:20px" src="<%-company.logo1%>" alt="logo" />                
+            </td>
+            <td>
+                <h4 style="font-style: normal; font-weight: bold;font-size: 28px;line-height: 40px;
+                color: rgba(0, 0, 0, 0.8);margin: 0px;"><%-company.companyName%></h4>
+
+                <p style="display:inline-block; font-style: normal; font-weight: normal; font-size: 18px; line-height: 28px;
+                color: rgba(46, 48, 53, 0.5); margin: 0px; margin-top: 2px;"><%-company.address1%></p>
+            </td>
+        </tr>
+
+
+        <% for(var k=0;k< suborders.length;k++){ %>
+
+        <tr style="background: #fff;display: block; padding: 15px 30px 10px;">
+            <td style="border-top: 1px solid #EDEDED; width: 100%; display: flex; padding-top: 20px;">
+                <img style="border-radius:20px" src="<%-suborders[k].service.thumbnail%>" alt="logo" />
+                <span style="display: flex; flex-direction: column; justify-content: center; margin-left: 10px;"><h4 style="font-style: normal; font-weight: bold; font-size: 16px; line-height: 16px; color: #000000; margin: 0px;"><%-suborders[k].service.name%></h4>
+                <p style="font-style: normal; font-weight: normal; font-size: 12px; color: rgba(46, 48, 53, 0.5); margin: 0; margin-top: 10px;"><%-suborders[k].quantity%> x <%-CURRENCY%><%-suborders[k].service.price%></p>
+                </span>
+                <p style="width: 59%; text-align: right; font-style: normal; font-weight: bold;font-size: 16px;
+                line-height: 16px;color: #000000;"><%-CURRENCY%><%-suborders[k].price%></p>                
+            </td>
+        </tr>
+        <% } %>
+
+
+
+        <tr style="background: #fff;display: flex; padding: 10px 30px 15px; align-items: center;">
+            <td style="width: 100%; display: flex; padding-top: 20px; border-top: 1px solid #EDEDED;">
+               <h4 style="font-style: normal; font-weight: normal; font-size: 15px; line-height: 16px; color: #2E3035; margin: 0px;">Subtotal</h4>               
+                <p style="width: 75%; text-align: right; font-style: normal; font-weight: bold;font-size: 16px;
+                line-height: 16px;color: #000000; margin: 0;"><%-CURRENCY%><%-orderPrice%></p>                
+            </td>
+        </tr>
+        <tr style="background: #fff;display: flex; padding: 10px 30px 15px; align-items: center;">
+            <td style="width: 100%; display: flex;">
+               <h4 style="font-style: normal; font-weight: normal; font-size: 15px; line-height: 16px; color: #2E3035; margin: 0px;">Taxes</h4>               
+                <p style="width: 92%; text-align: right; font-style: normal; font-weight: bold;font-size: 16px;
+                line-height: 16px;color: #000000; margin: 0;"><%-CURRENCY%><%-serviceCharges%></p>                
+            </td>
+        </tr>
+        <tr style="background: #fff;display: flex; padding: 10px 30px 15px; align-items: center;">
+            <td style="width: 100%; display: flex;">
+               <h4 style="font-style: normal; font-weight: normal; font-size: 15px; line-height: 16px; color: #2E3035; margin: 0px;">Promo - (<%-CURRENCY%><%-promoCode%>)</h4>               
+                <p style="width: 70%; text-align: right; font-style: normal; font-weight: bold;font-size: 16px;
+                line-height: 16px;color: #000000; margin: 0;">(<%-CURRENCY%><%-offerPrice%>)</p>                
+            </td>
+        </tr>
+        <tr style="background: #fff;display: flex; padding: 10px 30px 30px; align-items: center;">
+            <td style="width: 100%; display: flex; padding-top: 20px; border-top: 1px solid #EDEDED;">
+               <h4 style="font-style: normal; font-weight: bold; font-size: 20px; line-height: 16px; color: #2E3035; margin: 0px;">Paid<br><span style="font-size: 16px; font-weight: 400; line-height: 30px;color: rgba(46, 48, 53, 0.5);"><%-paymentType%></span></h4>               
+                <p style="width: 90%; text-align: right; font-style: normal; font-weight: bold;font-size: 20px;
+                line-height: 16px;color: #000000; margin: 0;"><%-CURRENCY%><%-totalOrderPrice%></p>                
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 0 0px;">
+                <p style="font-style: normal; font-weight: bold;font-size: 16px;
+                text-align: right; color: rgba(0, 0, 0, 0.5); margin-bottom: 5px;"><a style="color: #FB991A; text-decoration: none" href="#">Click here</a> to download your order summary</p>
+            </td>
+        </tr>
+        <!-- ------------------------------- -->
+        <tr style="background: #fff;margin-top: 20px; display: block;">
+          <td style="width: 41%; border-right: 1px solid #f1f1f1; display: inline-block; padding: 20px;">
+            <h4 style="font-style: normal; font-weight: bold; font-size: 20px; line-height: 24px;color: rgba(0, 0, 0, 0.8);margin: 0px;">Billing Address</h4>
+            <p style="font-style: normal; font-weight: normal; font-size: 14px; line-height: 22px;color: rgba(0, 0, 0, 0.5);"><%-address.addressName%><br> <%-address.town%><br> <%-address.landmark%></p>
+            </td>
+            <td style="display: inline-block; padding: 20px;">
+                <h4 style="font-style: normal; font-weight: bold; font-size: 20px; line-height: 24px;color: rgba(0, 0, 0, 0.8);margin: 0px;">Shipping Address</h4>
+                <p style="font-style: normal; font-weight: normal; font-size: 14px; line-height: 22px;color: rgba(0, 0, 0, 0.5);"><%-address.addressName%><br> <%-address.town%><br> <%-address.landmark%></p>
+                </td>              
+        </tr>
+    </table>
+
+    <table style="width: 100%; text-align: center;">
+        <tr style="background: #fff;">
+            <td style=" font-style: normal; font-weight: bold; font-size: 18px; line-height: 18px; color: #000000; padding:20px  30px; display: flex; max-width: 520px;margin: 0 auto; align-items: center; justify-content: center; ">
+                    Feel free to 
+            <a target="_blank" href="https://www.cerebruminfotech.com/cerekart/try" style="color: #fff; width: 155px;height: 40px;display: block;margin: 0 20px;font-weight: 500;font-size: 16px;text-transform: uppercase;line-height: 40px;background: #FB991A;border-radius: 80px;
+                text-align: center;
+                text-decoration: none;"> GET IN TOUCH</a>
+                with us!
+            </td>
+        </tr>
+        
+        <!-- ----------------------------- -->
+    </table>
+</body>
+
+</html>
