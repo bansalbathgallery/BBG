@@ -1,0 +1,231 @@
+.card_header{
+
+}
+.card_body{
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 49px;
+    font-size: 60px;
+    text-align: center;
+}
+.mt-details-tabs {
+	background-color: #fff;
+	padding: 20px 0px;
+}
+.mt-details-tabs-content {
+	padding: 20px 20px;
+}
+.mt-details-tabs-content label {
+	font-size: 14px;
+	font-weight: bold;
+	color: #333;
+	margin-bottom: 15px;
+}
+.mt-details-tabs-content p {
+	font-size: 14px;
+	color: #333;
+	margin-bottom: 15px;
+}
+.mt-gallery-images ul {
+	margin: 0 0 15px;
+	padding: 0;
+	width: 100%;
+}
+.mt-gallery-images ul li {
+	list-style: none;
+	display: inline-block;
+	margin-right: 8px;
+	background: #ddd;
+	width: 60px;
+	height: 60px;
+}
+.mt-story-textarea {
+	border: 1px solid #ddd;
+	padding: 8px;
+	width: 100%;
+	margin-bottom: 15px;
+}
+.mt-details-user-name {
+	text-align: center;
+}
+.mt-details-user-name .zmdi-account-circle {
+    font-size: 48px;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 8px;
+}
+.mt-cusins-details {
+	border: 1px solid #ddd;
+	margin-bottom: 15px;
+}
+.mt-cusins-details-inner {
+	background-color: #ddd;
+	padding: 8px;
+	border-bottom: 1px solid #ccc;
+	font-size: 14px;
+	color: #000;
+}
+.mt-cusins-details-inner-header {
+	background: #ccc;
+	font-weight: bold;
+}
+.mt-cusins-details-inner:nth-child(odd) {
+	background-color: #fff;
+}
+.mt-cusins-details-inner-header, .mt-cusins-details-inner-header:nth-child(odd) {
+	background: #ccc;
+	font-weight: bold;
+}
+.pickup-check-icon {
+    font-size: 24px;
+    vertical-align: top;
+}
+.mt-details-day {
+	margin-top: 8px;
+}
+.mt-details-aprove-buttons .btn {
+	margin-right: 15px;
+}
+
+.rm-middle {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    /*padding: 0px 20px 20px;*/
+	align-items: center;
+}
+.rm-middle-search-field {
+	width: 350px;
+	position: relative;
+}
+.rm-middle-search-field .form-control {
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 0px 8px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+	padding-left: 35px;
+}
+.rm-middle .radio {
+    font-size: 14px;
+}
+.rm-middle-search-field .zmdi-search {
+    position: absolute;
+    top: 11px;
+    left: 8px;
+    font-size: 20px;
+}
+.sm-sub-user-form {
+	padding-bottom: 20px;
+}
+.sm-user-sub-head {
+    margin-top: 0;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+@media screen and (max-width: 767px) {
+	.sm-user-sub-head {
+		padding: 15px 15px 0px;
+	}
+	.rm-middle-search-field {
+		width: 100%;
+		margin-top: 15px;
+	}
+}
+
+.rm-middle {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    padding: 0px 20px 20px;
+	align-items: center;
+}
+.rm-middle-search-field {
+	width: 350px;
+	position: relative;
+}
+.rm-middle-search-field .form-control {
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 0px 8px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+	padding-left: 35px;
+}
+.rm-middle .radio {
+    font-size: 14px;
+}
+.rm-middle-search-field .zmdi-search {
+    position: absolute;
+    top: 11px;
+    left: 8px;
+    font-size: 20px;
+}
+.sm-sub-user-form {
+	padding-bottom: 20px;
+}
+.sm-user-sub-head {
+    margin-top: 0;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+.sm-order-details-header {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.sm-order-top-left .card-body {
+    padding: 0 26px 20px;
+}
+.sm-order-top-left .card-body h4 {
+    font-size: 14px;
+    color: #333;
+    margin-top: 0;
+}
+.sm-order-left-details {
+	padding: 0 0 0 20px;
+	margin: 0;
+}
+.sm-order-left-details li {
+	position: relative;    
+	padding-bottom: 20px;
+}
+.sm-order-top-left {
+    float: left;
+    width: 100%;
+}
+.sm-order-left-details li:after {
+ content: "";
+    position: absolute;
+    top: 36px;
+    background: #000;
+    width: 2px;
+    height: calc(100% - 6px);
+    left: 11px;
+
+}
+.sm-order-left-details li:last-child:after {
+	display: none;
+}
+.sm-order-top-left .table-responsive {
+    margin-bottom: 20px;
+}
+.sm-order-contact-details p {
+    margin-bottom: 8px;
+}
+.sm-order-left-details li p {
+	margin-bottom: 0;
+}
+@media screen and (max-width: 767px) {
+	.sm-user-sub-head {
+		padding: 15px 15px 0px;
+	}
+	.rm-middle-search-field {
+		width: 100%;
+		margin-top: 15px;
+	}
+}
