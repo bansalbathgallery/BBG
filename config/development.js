@@ -1,0 +1,28 @@
+const db = require('./db');
+module.exports = {
+	db: db.development,
+	PORT:9062,
+	mediapath: 'public/company/',
+	dirnames : ['images', 'thumbnails', 'audios', 'videos','documents'],
+	jwtToken: 'PGSGFUISBHS=^$#*(%^#',
+	saltRounds: 10,
+	authTokenExpiration: '7d',
+	refreshTokenExpiration: '30d',
+	MAIL_USERNAME:'',
+	MAIL_PASSWORD:'461344Az02Tw9e8h687fa918P1',
+	FCM_KEY:'sfnsvdfvs',
+	UPLOAD_DIRECTORY:'public/',
+	IMAGE_APPEND_URL:'http://localhost:9062/',
+	BASEURL:'http://localhost:9062/',
+	NOTIFICATION_KEY:'',
+	NOTIFICATION_EMP_KEY:'',
+	REMINDER_MAIL:'info@secretmenu',
+	EMAIL_HOST :'',
+	EMAIL_KEY :'apikey',
+	INVOICE_SUBJECT:'Info Message',
+	FOROGT_SUBJECT:'Reset Password request',
+	EMAIL_PASS :''  , 
+	APP_NAME:'Secret Menu',
+	PAYKEY: '',
+	PAYSECRET: ''
+};
