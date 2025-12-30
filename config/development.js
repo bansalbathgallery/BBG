@@ -1,6 +1,6 @@
 const db = require('./db');
 module.exports = {
-	db: db.development,
+	db: db.production,
 	PORT:9062,
 	mediapath: 'public/company/',
 	dirnames : ['images', 'thumbnails', 'audios', 'videos','documents'],
