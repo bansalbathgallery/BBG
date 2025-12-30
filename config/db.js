@@ -11,10 +11,10 @@ module.exports = {
     connectionTimeout: 300000,
     requestTimeout: 300000,
     pool: {
-      max: 50,
-      acquire: 300000,
-      idleTimeoutMillis: 300000,
-      idle: 300000
+      max: 3,
+      acquire: 30000,
+      idleTimeoutMillis: 10000,
+      idle: 10000
     },
     define: {
       charset: 'utf8mb4',
@@ -35,10 +35,10 @@ module.exports = {
     connectionTimeout: 300000,
     requestTimeout: 300000,
     pool: {
-      max: 50,
-      acquire: 300000,
-      idleTimeoutMillis: 300000,
-      idle: 300000
+      max: 3,
+      acquire: 30000,
+      idleTimeoutMillis: 10000,
+      idle: 10000
     },
     define: {
       charset: 'utf8mb4',
