@@ -1,9 +1,9 @@
 module.exports = {
   development: {
-    username: 'root',
-    password: '',
-    database: 'secretm',
-    host: 'localhost',
+    username: 'bbg-secret-menu',
+    password: 'JIBdHC3v^wP#',
+    database: 'bbg',
+    host: '68.178.238.97',
     dialect: 'mysql',
     dialectOptions: {
       charset: 'utf8mb4'
