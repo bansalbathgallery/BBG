@@ -10,7 +10,7 @@ config = require('config');
 var cookieParser  = require('cookie-parser');
 var flash         = require('connect-flash');
  tc = require("time-slots-generator");
-
+console.log('config : ',config)
 var middleware         = require("./middleware/auth");
 
 checkAuth         = middleware.userAuth
