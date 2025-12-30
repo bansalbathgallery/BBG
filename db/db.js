@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
- config = require('../config').db;
+ config = require('../config/db');
 console.log('config :',config)
 const models = require('./models');
 
