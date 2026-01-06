@@ -6,11 +6,11 @@ const server = require('http').createServer(app);
  io = require('socket.io')(server);
 const socket = require('./socket')(io);
 const expressValidator = require('express-validator');
-config = require('config').development;
+configDev = require('config/development');
 var cookieParser  = require('cookie-parser');
 var flash         = require('connect-flash');
  tc = require("time-slots-generator");
-console.log('config : ',config)
+console.log('config : ',configDev)
 var middleware         = require("./middleware/auth");
 
 checkAuth         = middleware.userAuth
@@ -36,7 +36,7 @@ CURRENCY="Rs."
 responseHelper = require("./helpers/responseHelper");
 common = require('./helpers/common');
 
-const port = config.PORT || 9066;
+const port = configDev.PORT || 9066;
 
 
 app.use(cookieParser());
