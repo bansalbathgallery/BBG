@@ -1,7 +1,7 @@
 const db = require('./db');
 module.exports = {
 	db: db.production,
-	PORT:9062,
+	PORT:9066,
 	mediapath: 'public/company/',
 	dirnames : ['images', 'thumbnails', 'audios', 'videos','documents'],
 	jwtToken: 'PGSGFUISBHS=^$#*(%^#',
