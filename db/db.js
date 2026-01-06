@@ -1,16 +1,16 @@
 const Sequelize = require('sequelize');
- config = require('../config/db');
+ configdb = require('../config/db');
 //console.log('config :',config)
 const models = require('./models');
 
 // const firebase = require('firebase');
 // const firebaseApp = firebase.initializeApp(config.firebase);
 
- db = new Sequelize(config.production.database, config.production.username, config.production.password,
+ db = new Sequelize(configdb.production.database, configdb.production.username, configdb.production.password,
    {
-  host: config.production.host,
-  dialect: config.production.dialect,
-  pool: config.production.pool
+  host: configdb.production.host,
+  dialect: configdb.production.dialect,
+  pool: configdb.production.pool
   }
 );
 
