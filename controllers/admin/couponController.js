@@ -49,7 +49,7 @@ module.exports = {
         {
           icon = Date.now() + '_' + ImageFile.name;
 
-          ImageFile.mv(config.UPLOAD_DIRECTORY +"coupans/icons/"+ icon, function (err) {
+          ImageFile.mv(configDev.UPLOAD_DIRECTORY +"coupans/icons/"+ icon, function (err) {
               //upload file
               if (err)
               return responseHelper.error(res, err.meessage, 400);   
@@ -211,7 +211,7 @@ module.exports = {
         if(ImageFile)
         {
           icon = Date.now() + '_' + ImageFile.name;
-          ImageFile.mv(config.UPLOAD_DIRECTORY +"coupans/icons/"+ icon, function (err) {
+          ImageFile.mv(configDev.UPLOAD_DIRECTORY +"coupans/icons/"+ icon, function (err) {
               //upload file
               if (err)
               return responseHelper.error(res, err.meessage, 400);   

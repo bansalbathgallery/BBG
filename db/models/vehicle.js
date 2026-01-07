@@ -45,7 +45,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: '',
       get() {
         if( this.getDataValue('dlImage')!=null && this.getDataValue('dlImage')!="")
-        return config.IMAGE_APPEND_URL+"employees/proofs/"+this.getDataValue('dlImage')
+        return configDev.IMAGE_APPEND_URL+"employees/proofs/"+this.getDataValue('dlImage')
         else  return ""
       },
     },
@@ -55,7 +55,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: '',
       get() {
         if( this.getDataValue('rcImage')!=null && this.getDataValue('rcImage')!="")
-        return config.IMAGE_APPEND_URL+"employees/proofs/"+this.getDataValue('rcImage')
+        return configDev.IMAGE_APPEND_URL+"employees/proofs/"+this.getDataValue('rcImage')
         else  return ""
       },
     },

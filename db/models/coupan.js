@@ -55,7 +55,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       get() {
         if(this.getDataValue('icon')!=null && this.getDataValue('icon')!="")
-        return config.IMAGE_APPEND_URL+"coupans/icons/"+this.getDataValue('icon')
+        return configDev.IMAGE_APPEND_URL+"coupans/icons/"+this.getDataValue('icon')
     },
       defaultValue: "",
       allowNull: true, 
@@ -65,7 +65,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       get() {
         if( this.getDataValue('thumbnail')!=null && this.getDataValue('thumbnail')!="")
-        return config.IMAGE_APPEND_URL+"coupans/thumbnails/"+this.getDataValue('thumbnail')
+        return configDev.IMAGE_APPEND_URL+"coupans/thumbnails/"+this.getDataValue('thumbnail')
     },
       defaultValue: "",
       allowNull: true, 

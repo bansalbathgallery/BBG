@@ -98,7 +98,7 @@ module.exports = {
           if(ImageFile1)
           {
             idProof = Date.now() + '_' + ImageFile1.name;
-            ImageFile1.mv(config.UPLOAD_DIRECTORY +"employees/proofs/"+ idProof, function (err) {
+            ImageFile1.mv(configDev.UPLOAD_DIRECTORY +"employees/proofs/"+ idProof, function (err) {
             //upload file
             if (err)
             responseHelper.error(res, appstrings.err.meessage, 400);   
@@ -151,8 +151,8 @@ module.exports = {
             id : userId
           };
 
-          const authToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.authTokenExpiration });
-          const refreshToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.refreshTokenExpiration });
+          const authToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.authTokenExpiration });
+          const refreshToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.refreshTokenExpiration });
           const userDetail = {};
           userDetail.email = users.dataValues.email;
           userDetail.firstName = users.dataValues.firstName;
@@ -179,7 +179,7 @@ module.exports = {
               id: users.dataValues.id
             }
           });
-          var dataEmail={name: users.dataValues.firstName,app_name:config.APP_NAME}
+          var dataEmail={name: users.dataValues.firstName,app_name:configDev.APP_NAME}
           commonNotification.sendMail(users.dataValues.email,dataEmail)
           return responseHelper.post(res, "Signup Successfully", userDetail);
         }
@@ -218,7 +218,7 @@ module.exports = {
           id : userData.dataValues.id
 
         },
-        config.jwtToken,
+        configDev.jwtToken,
         { algorithm: 'HS256', expiresIn: '2880m' }
         );
 
@@ -315,7 +315,7 @@ module.exports = {
         id : userData.dataValues.id
 
         },
-        config.jwtToken,
+        configDev.jwtToken,
         { algorithm: 'HS256', expiresIn: '2880m' }
         );
         const updatedResponse = await EMPLOYEE.update({
@@ -371,8 +371,8 @@ module.exports = {
           id : userId
         };
 
-        const authToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.authTokenExpiration });
-        const refreshToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.refreshTokenExpiration });
+        const authToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.authTokenExpiration });
+        const refreshToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.refreshTokenExpiration });
         const userDetail = {};
         userDetail.email = users.dataValues.email;
         userDetail.firstName = users.dataValues.firstName;
@@ -391,7 +391,7 @@ module.exports = {
             id: users.dataValues.id
           }
         });
-        var dataEmail={name: users.dataValues.firstName,app_name:config.APP_NAME}
+        var dataEmail={name: users.dataValues.firstName,app_name:configDev.APP_NAME}
         commonNotification.sendMail(users.dataValues.email,dataEmail)
         return responseHelper.post(res, "Signup Successfully", userDetail);
       }
@@ -439,7 +439,7 @@ module.exports = {
         if(ImageFile)
         {    
           imageName = Date.now() + '_' + ImageFile.name;
-          ImageFile.mv(config.UPLOAD_DIRECTORY +"employees/proofs/"+ imageName, function (err) {
+          ImageFile.mv(configDev.UPLOAD_DIRECTORY +"employees/proofs/"+ imageName, function (err) {
           if (err)
             responseHelper.error(res,err.message,400)
           });
@@ -449,7 +449,7 @@ module.exports = {
         if(ImageFile1)
         {
           idProof = Date.now() + 'id_' + ImageFile1.name;
-          ImageFile1.mv(config.UPLOAD_DIRECTORY +"employees/proofs/"+ idProof, function (err) {
+          ImageFile1.mv(configDev.UPLOAD_DIRECTORY +"employees/proofs/"+ idProof, function (err) {
           //upload file
           if (err)
           responseHelper.error(res, appstrings.err.meessage, 400);   
@@ -518,7 +518,7 @@ module.exports = {
         let newpassword = Math.random().toString(36).slice(-8);
         const pswd = await hashPassword.generatePass(newpassword);
 
-        var dataEmail={name: userDetail.firstName,password: newpassword,app_name:config.APP_NAME}
+        var dataEmail={name: userDetail.firstName,password: newpassword,app_name:configDev.APP_NAME}
         commonNotification.sendForgotPasswordMail(userDetail.email,dataEmail)
 
         //Update Password
@@ -728,7 +728,7 @@ module.exports = {
         //await EMPLOYEE.update({ email: params.email }, {where: { id:params.empId}}) ; 
         await EMPLOYEE.update({ otp: OTP }, {where: { id:params.empId}}) ; 
 
-        var dataEmail={otp:OTP, app_name:config.APP_NAME};
+        var dataEmail={otp:OTP, app_name:configDev.APP_NAME};
         commonNotification.sendOtpMail(params.email,dataEmail)
         return responseHelper.post(res, "We have sent one time otp send to your email address.",null,200);
       }  

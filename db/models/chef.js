@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
           get() {
             if( this.getDataValue('images')!=null && this.getDataValue('images')!="")
-            return config.IMAGE_APPEND_URL+"users/"+this.getDataValue('images')
+            return configDev.IMAGE_APPEND_URL+"users/"+this.getDataValue('images')
             else
               return this.getDataValue('images')
         },

@@ -21,7 +21,7 @@ const uploadFile = async (req, res, fields, filePath) => {
                     reject(err);
                 }
                 if (req.files == null) {
-                    imagesName.push({ 'imageName': config.defaultImage })
+                    imagesName.push({ 'imageName': configDev.defaultImage })
                     resolve(imagesName);
                     return;
                 }

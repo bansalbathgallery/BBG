@@ -21,7 +21,7 @@ const uploadFile = async (req, res, fields, filePath) => {
           reject(err);
         }
         if (req.files.image == null) {
-          imagesName.push({ 'imageName': config.defaultImage })
+          imagesName.push({ 'imageName': configDev.defaultImage })
 
           resolve(imagesName);
           return;
@@ -29,19 +29,19 @@ const uploadFile = async (req, res, fields, filePath) => {
         for (let i = 0; i < req.files.image.length; i++) {
           imagesName.push({ 'imageName': filePath + req.files.image[i].filename })
           if (req.files.thumb == null) {
-            imagesName.push({ 'thumbName': config.defaultThumb })
+            imagesName.push({ 'thumbName': configDev.defaultThumb })
           }
           else {
             imagesName.push({ 'thumbName': filePath + req.files.thumb[i].filename })
           }
           if (req.files.image1 == null) {
-            imagesName.push({ 'image1': config.defaultImage })
+            imagesName.push({ 'image1': configDev.defaultImage })
           }
           else {
             imagesName.push({ 'image1': filePath + req.files.image1[i].filename })
           }
           if (req.files.image2 == null) {
-            imagesName.push({ 'image2': config.defaultImage })
+            imagesName.push({ 'image2': configDev.defaultImage })
           }
           else {
             imagesName.push({ 'image2': filePath + req.files.image2[i].filename })

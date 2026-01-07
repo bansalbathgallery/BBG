@@ -80,7 +80,7 @@ module.exports = {
         });
      if(params.status == '1')
         {
-          var dataEmail={name: userData.dataValues.firstName,app_name:config.APP_NAME}
+          var dataEmail={name: userData.dataValues.firstName,app_name:configDev.APP_NAME}
           commonNotification.sendApprovedMail(userData.dataValues.email,dataEmail)
         }
         if(updatedResponse)
@@ -306,7 +306,7 @@ module.exports = {
 //         {
 //           profileImage = Date.now() + '_' + ImageFile.name;
   
-//         ImageFile.mv(config.UPLOAD_DIRECTORY +"employees/images/"+ profileImage, function (err) {
+//         ImageFile.mv(configDev.UPLOAD_DIRECTORY +"employees/images/"+ profileImage, function (err) {
 //             //upload file
 //             if (err)
 //             return responseHelper.error(res, err.meessage, 400);   
@@ -318,7 +318,7 @@ module.exports = {
 //       if(ImageFile1)
 //       {
 //         idProof = Date.now() + '_' + ImageFile1.name;
-//       ImageFile1.mv(config.UPLOAD_DIRECTORY +"employees/proofs/"+ idProof, function (err) {
+//       ImageFile1.mv(configDev.UPLOAD_DIRECTORY +"employees/proofs/"+ idProof, function (err) {
 //           //upload file
 //           if (err)
 //           responseHelper.error(res, appstrings.err.meessage, 400);   
@@ -330,7 +330,7 @@ module.exports = {
 //     if(ImageFile2)
 //     {
 //       coverImage = Date.now() + '_' + ImageFile2.name;
-//     ImageFile2.mv(config.UPLOAD_DIRECTORY +"employees/images/"+ coverImage, function (err) {
+//     ImageFile2.mv(configDev.UPLOAD_DIRECTORY +"employees/images/"+ coverImage, function (err) {
 //         //upload file
 //         if (err)
 //         {
@@ -444,7 +444,7 @@ module.exports = {
 //       {
 //         profileImage = Date.now() + '_' + ImageFile.name;
 
-//       ImageFile.mv(config.UPLOAD_DIRECTORY +"employees/images/"+ profileImage, function (err) {
+//       ImageFile.mv(configDev.UPLOAD_DIRECTORY +"employees/images/"+ profileImage, function (err) {
 //           //upload file
 //           if (err)
 //          return responseHelper.error(res, err.message, 400);   
@@ -456,7 +456,7 @@ module.exports = {
 //     if(ImageFile1)
 //     {
 //       idProof = Date.now() + '_' + ImageFile1.name;
-//     ImageFile1.mv(config.UPLOAD_DIRECTORY +"employees/proofs/"+ idProof, function (err) {
+//     ImageFile1.mv(configDev.UPLOAD_DIRECTORY +"employees/proofs/"+ idProof, function (err) {
 //         //upload file
 //         if (err)
 //         {

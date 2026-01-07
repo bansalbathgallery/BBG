@@ -160,8 +160,8 @@ module.exports = {
             id : customerId
           };
 
-          const authToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.authTokenExpiration });
-          const refreshToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.refreshTokenExpiration });
+          const authToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.authTokenExpiration });
+          const refreshToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.refreshTokenExpiration });
           const userDetail = {};
           userDetail.email = companies.dataValues.email;
           userDetail.companyName = companies.dataValues.companyName;
@@ -201,7 +201,7 @@ module.exports = {
           //   userDetail.userId = "";
           // }
 
-          var dataEmail={name: companies.dataValues.companyName,app_name:config.APP_NAME}
+          var dataEmail={name: companies.dataValues.companyName,app_name:configDev.APP_NAME}
           commonNotification.sendMail(companies.dataValues.email,dataEmail)
           return responseHelper.post(res, "Signup Successfully", userDetail);
         }
@@ -245,7 +245,7 @@ login: async (req, res) => {
         id : userData.dataValues.id
 
       },
-      config.jwtToken,
+      configDev.jwtToken,
       { 
         algorithm: 'HS256', expiresIn: '2880m' }
       );
@@ -295,7 +295,7 @@ Sociallogin: async (req, res, next) => {
       id : userData.dataValues.id
 
       },
-      config.jwtToken,
+      configDev.jwtToken,
       { algorithm: 'HS256', expiresIn: '2880m' }
       );
       const updatedResponse = await USER.update({
@@ -349,8 +349,8 @@ Sociallogin: async (req, res, next) => {
         id : userId
       };
 
-      const authToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.authTokenExpiration });
-      const refreshToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.refreshTokenExpiration });
+      const authToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.authTokenExpiration });
+      const refreshToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.refreshTokenExpiration });
       const userDetail = {};
       userDetail.email = users.dataValues.email;
       userDetail.firstName = users.dataValues.firstName;
@@ -369,7 +369,7 @@ Sociallogin: async (req, res, next) => {
           id: users.dataValues.id
         }
       });
-      var dataEmail={name: users.dataValues.firstName,app_name:config.APP_NAME}
+      var dataEmail={name: users.dataValues.firstName,app_name:configDev.APP_NAME}
       commonNotification.sendMail(users.dataValues.email,dataEmail)
       return responseHelper.post(res, "Signup Successfully", userDetail);
     }
@@ -463,7 +463,7 @@ updateProfile: async (req, res, next) => {
             uploadPicture.push(array);
 
             //upload.push(bannerImage)
-            ImageFile.mv(config.UPLOAD_DIRECTORY +"users/"+ bannerImage, function (err) {
+            ImageFile.mv(configDev.UPLOAD_DIRECTORY +"users/"+ bannerImage, function (err) {
             //upload file
             if (err)
               return responseHelper.error(res, err.meessage, 400);   
@@ -479,7 +479,7 @@ updateProfile: async (req, res, next) => {
           array.picture  = bannerImage;
           uploadPicture.push(array);
           //upload.push(bannerImage)
-          ImageFile.mv(config.UPLOAD_DIRECTORY +"users/"+ bannerImage, function (err) {
+          ImageFile.mv(configDev.UPLOAD_DIRECTORY +"users/"+ bannerImage, function (err) {
             //upload file
             if (err)
             return responseHelper.error(res, err.meessage, 400);   
@@ -498,7 +498,7 @@ updateProfile: async (req, res, next) => {
         ImagethumbName = Date.now() + '_' + ImageThumbFile.name;
         await multipleFileupload(ImageThumbFile,ImagethumbName);
 
-        // ImageThumbFile.mv(config.UPLOAD_DIRECTORY +"users/"+ ImagethumbName, function (err) {
+        // ImageThumbFile.mv(configDev.UPLOAD_DIRECTORY +"users/"+ ImagethumbName, function (err) {
         //   console.log('success');
         // });
         const restVideos = await CompanyVideo.create({
@@ -589,7 +589,7 @@ updateProfile: async (req, res, next) => {
             if(chefImageFile)
             {
               chefUploadImage = Date.now() + '_' + chefImageFile.name.replace(/\s/g, "");
-              chefImageFile.mv(config.UPLOAD_DIRECTORY +"users/"+ chefUploadImage, function (err) {
+              chefImageFile.mv(configDev.UPLOAD_DIRECTORY +"users/"+ chefUploadImage, function (err) {
                   //upload file
                   if (err)
                   return responseHelper.error(res, err.meessage, 400);   
@@ -691,7 +691,7 @@ updateProfile: async (req, res, next) => {
         let newpassword = Math.random().toString(36).slice(-8);
         const pswd = await hashPassword.generatePass(newpassword);
 
-        var dataEmail={name: userDetail.companyName,password: newpassword,app_name:config.APP_NAME}
+        var dataEmail={name: userDetail.companyName,password: newpassword,app_name:configDev.APP_NAME}
         commonNotification.sendForgotPasswordMail(userDetail.email,dataEmail)
 
         //Update Password
@@ -826,7 +826,7 @@ uploadDocuments: async (req, res, next) => {
             array.companyId = data.restaurantId;
             array.document  = bannerImage;
             upload.push(array);
-            ImageFile.mv(config.UPLOAD_DIRECTORY +"users/"+ bannerImage, function (err) {
+            ImageFile.mv(configDev.UPLOAD_DIRECTORY +"users/"+ bannerImage, function (err) {
             //upload file
             if (err)
               return responseHelper.error(res, err.meessage, 400);   
@@ -841,7 +841,7 @@ uploadDocuments: async (req, res, next) => {
           array.companyId = data.restaurantId;
           array.document  = bannerImage;
           upload.push(array);
-          ImageFile.mv(config.UPLOAD_DIRECTORY +"users/"+ bannerImage, function (err) {
+          ImageFile.mv(configDev.UPLOAD_DIRECTORY +"users/"+ bannerImage, function (err) {
             //upload file
             if (err)
             return responseHelper.error(res, err.meessage, 400);   
@@ -1108,7 +1108,7 @@ uploadDocuments: async (req, res, next) => {
 };
 
 async function multipleFileupload(ImageFile4,name){
-  await ImageFile4.mv(config.UPLOAD_DIRECTORY +"users/"+ name, function (err) {
+  await ImageFile4.mv(configDev.UPLOAD_DIRECTORY +"users/"+ name, function (err) {
     if (err){
       var imagename = name;
       return imagename;

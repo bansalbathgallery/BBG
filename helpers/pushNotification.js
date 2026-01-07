@@ -1,7 +1,7 @@
 const FCM = require('fcm-push');
 
 const userId = (token) => {
-    const decoded = jwt.verify(token, config.jwtToken);
+    const decoded = jwt.verify(token, configDev.jwtToken);
     return decoded.id;
 }
 

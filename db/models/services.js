@@ -34,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       get() {
         if(this.getDataValue('icon')!="")
-        return config.IMAGE_APPEND_URL+"services/icons/"+this.getDataValue('icon')
+        return configDev.IMAGE_APPEND_URL+"services/icons/"+this.getDataValue('icon')
         else return ""
 
     },
@@ -46,7 +46,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       get() {
         if(this.getDataValue('thumbnail')!="")
-        return config.IMAGE_APPEND_URL+"services/thumbnails/"+this.getDataValue('thumbnail')
+        return configDev.IMAGE_APPEND_URL+"services/thumbnails/"+this.getDataValue('thumbnail')
         else return ""
     },
      

@@ -64,7 +64,7 @@ images: {
       imageArray=[];
       for(var k=0;k<images.length;k++)
       {
-        imageArray.push( config.IMAGE_APPEND_URL+"users/"+images[k]);
+        imageArray.push( configDev.IMAGE_APPEND_URL+"users/"+images[k]);
       }
       return  imageArray;
     }
@@ -77,7 +77,7 @@ logo1: {
   allowNull: true,
       get() {
         if( this.getDataValue('logo1')!=null && this.getDataValue('logo1')!="")
-        return config.IMAGE_APPEND_URL+"users/"+this.getDataValue('logo1')
+        return configDev.IMAGE_APPEND_URL+"users/"+this.getDataValue('logo1')
         else
           return this.getDataValue('logo1')
     },
@@ -89,7 +89,7 @@ logo2: {
   allowNull: true,
       get() {
         if( this.getDataValue('logo2')!=null && this.getDataValue('logo2')!="")
-        return config.IMAGE_APPEND_URL+"users/"+this.getDataValue('logo2')
+        return configDev.IMAGE_APPEND_URL+"users/"+this.getDataValue('logo2')
       else
           return this.getDataValue('logo2')
     },
@@ -102,7 +102,7 @@ logo3: {
   allowNull: true,
       get() {
         if( this.getDataValue('logo3')!=null && this.getDataValue('logo3')!="")
-        return config.IMAGE_APPEND_URL+"users/"+this.getDataValue('logo3')
+        return configDev.IMAGE_APPEND_URL+"users/"+this.getDataValue('logo3')
       else
           return this.getDataValue('logo3')
     },

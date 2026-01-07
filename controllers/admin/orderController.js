@@ -14,8 +14,8 @@ const orderPayment = db.models.payment;
 const serviceRating = db.models.serviceRatings;
 const orderStats = db.models.orderStatus;
 USER=db.models.users;
-const keyPublishable = config.PAYKEY;
-const keySecret = config.PAYSECRET;
+const keyPublishable = configDev.PAYKEY;
+const keySecret = configDev.PAYSECRET;
 const stripe = require("stripe")(keySecret);
 //Relations
 CART.belongsTo(SERVICES,{foreignKey: 'serviceId'});

@@ -11,8 +11,8 @@ const ORDERS     = db.models.orders;
 const SUBORDERS  = db.models.suborders;
 const orderPayment = db.models.payment;
 const serviceRating = db.models.serviceRatings;
-const keyPublishable = config.PAYKEY;
-const keySecret = config.PAYSECRET;
+const keyPublishable = configDev.PAYKEY;
+const keySecret = configDev.PAYSECRET;
 const SETTING= db.models.settings;
 const EARNING= db.models.earnings;
 const stripe = require("stripe")(keySecret);
@@ -408,7 +408,7 @@ module.exports = {
             ImageFile = req.files['icon'][k];    
             bannerImage = Date.now() + '_' + ImageFile.name.replace(/\s/g, "");
             upload.push(bannerImage);
-            ImageFile.mv(config.UPLOAD_DIRECTORY +"services/icons/"+ bannerImage, function (err) {
+            ImageFile.mv(configDev.UPLOAD_DIRECTORY +"services/icons/"+ bannerImage, function (err) {
             //upload file
             if (err)
               return responseHelper.error(res, err.meessage, 400);   
@@ -420,7 +420,7 @@ module.exports = {
           ImageFile = req.files['icon'];    
           bannerImage = Date.now() + '_' + ImageFile.name.replace(/\s/g, "");
           upload.push(bannerImage);
-          ImageFile.mv(config.UPLOAD_DIRECTORY +"services/icons/"+ bannerImage, function (err) {
+          ImageFile.mv(configDev.UPLOAD_DIRECTORY +"services/icons/"+ bannerImage, function (err) {
             //upload file
             if (err)
             return responseHelper.error(res, err.meessage, 400);   
@@ -477,7 +477,7 @@ module.exports = {
             ImageFile = req.files['icon'][k];    
             bannerImage = Date.now() + '_' + ImageFile.name.replace(/\s/g, "");
             upload.push(bannerImage);
-            ImageFile.mv(config.UPLOAD_DIRECTORY +"services/icons/"+ bannerImage, function (err) {
+            ImageFile.mv(configDev.UPLOAD_DIRECTORY +"services/icons/"+ bannerImage, function (err) {
             //upload file
             if (err)
               return responseHelper.error(res, err.meessage, 400);   
@@ -489,7 +489,7 @@ module.exports = {
           ImageFile = req.files['icon'];    
           bannerImage = Date.now() + '_' + ImageFile.name.replace(/\s/g, "");
           upload.push(bannerImage);
-          ImageFile.mv(config.UPLOAD_DIRECTORY +"services/icons/"+ bannerImage, function (err) {
+          ImageFile.mv(configDev.UPLOAD_DIRECTORY +"services/icons/"+ bannerImage, function (err) {
             //upload file
             if (err)
             return responseHelper.error(res, err.meessage, 400);   

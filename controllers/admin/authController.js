@@ -190,7 +190,7 @@ module.exports = {
         userData= JSON.parse(JSON.stringify(userData))
         var number= Math.floor(Math.random()*(10000000-0+1)+10000000 )+"";
         const newPassword = await hashPassword.generatePass(number);
-        var dataEmail={name: userData.companyName,password: number,app_name:config.APP_NAME}
+        var dataEmail={name: userData.companyName,password: number,app_name:configDev.APP_NAME}
         commonNotification.sendForgotPasswordMail(userData.email,dataEmail)
         await COMPANY.update({ password: newPassword}, {where: { id: userData.id}}) ; 
         return responseHelper.post(res, appstrings.password_reset_success,null,200);

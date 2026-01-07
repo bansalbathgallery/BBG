@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(60),
       defaultValue: '',
       get() {
-        return config.IMAGE_APPEND_URL+"banners/"+this.getDataValue('url')
+        return configDev.IMAGE_APPEND_URL+"banners/"+this.getDataValue('url')
     },
       allowNull: true
 

@@ -49,7 +49,7 @@ module.exports = {
             {
               logo1 = Date.now() + '_' + ImageFile.name;
 
-              ImageFile.mv(config.UPLOAD_DIRECTORY +"users/"+ logo1, function (err) {
+              ImageFile.mv(configDev.UPLOAD_DIRECTORY +"users/"+ logo1, function (err) {
                   //upload file
                   if (err)
                   return responseHelper.error(res, err.meessage, 400);   

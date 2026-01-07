@@ -14,7 +14,7 @@ var functions={
         }  
         var authorization = bearerHeader;
 
-        jwt.verify(authorization,config.jwtToken, async function(err, decoded){
+        jwt.verify(authorization,configDev.jwtToken, async function(err, decoded){
           if(decoded){
             //console.log(decoded)
                req.id = decoded.id;
@@ -90,7 +90,7 @@ var functions={
         }  
         var authorization = bearerHeader;
 
-        jwt.verify(authorization,config.jwtToken, async function(err, decoded){
+        jwt.verify(authorization,configDev.jwtToken, async function(err, decoded){
           if(decoded){
                req.id = decoded.id;
                req.phoneNumber = decoded.phoneNumber;

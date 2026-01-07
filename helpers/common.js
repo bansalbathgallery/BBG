@@ -6,11 +6,11 @@ const moment = require('moment');
 var methods={
 
  userId :  (token) => {
-    const decoded = jwt.verify(token, config.jwtToken);
+    const decoded = jwt.verify(token, configDev.jwtToken);
     return decoded.id;
 },
  companyId : (token) => {
-    const decoded = jwt.verify(token, config.jwtToken);
+    const decoded = jwt.verify(token, configDev.jwtToken);
     return decoded.companyId;
 },
 
@@ -39,7 +39,7 @@ return false
 uploadFunction:  function(req,res,imageName)
 {
     ImageFile = req.files.image;    
-    ImageFile.mv(config.mediapath + imageName, function (err) {
+    ImageFile.mv(configDev.mediapath + imageName, function (err) {
         if(err){
             return responseHelper.error(res, 'Unable to upload image', 400);
         }

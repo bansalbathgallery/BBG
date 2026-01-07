@@ -9,8 +9,8 @@
  var transporter = nodemailer.createTransport({
     service: 'SendGrid',
     auth: {
-        user: config.MAIL_USERNAME, 
-        pass: config.MAIL_PASSWORD
+        user: configDev.MAIL_USERNAME, 
+        pass: configDev.MAIL_PASSWORD
     }
  });
 
@@ -54,7 +54,7 @@ sendMail :function (emails,data)
    var renderedHtml = ejs.render(index, 
         data); 
     var mailOptions = {
-     from: config.REMINDER_MAIL,
+     from: configDev.REMINDER_MAIL,
      to: emails,
      subject: "SignUp Successfully",
      // forceEmbeddedImages: true,
@@ -75,7 +75,7 @@ sendApprovedMail :function (emails,data)
    var renderedHtml = ejs.render(index, 
         data); 
     var mailOptions = {
-     from: config.REMINDER_MAIL,
+     from: configDev.REMINDER_MAIL,
      to: emails,
      subject: "Confirmation Account Approval!",
      // forceEmbeddedImages: true,
@@ -96,7 +96,7 @@ sendOtpMail :function (emails,data)
    var renderedHtml = ejs.render(index, 
         data); 
     var mailOptions = {
-     from: config.REMINDER_MAIL,
+     from: configDev.REMINDER_MAIL,
      to: emails,
      subject: "Email verification!",
      // forceEmbeddedImages: true,
@@ -117,9 +117,9 @@ sendForgotPasswordMail :function (emails,data)
     var renderedHtml = ejs.render(index, 
         data); 
     var mailOptions = {
-     from: config.REMINDER_MAIL,
+     from: configDev.REMINDER_MAIL,
      to: emails,
-     subject: config.FOROGT_SUBJECT,
+     subject: configDev.FOROGT_SUBJECT,
      // forceEmbeddedImages: true,
      html: renderedHtml
 };
@@ -135,7 +135,7 @@ transporter.sendMail(mailOptions, function(error, info){
 sendNotification :function (params)
  {
     var tokens=[];
-    var fcm = new FCM(config.NOTIFICATION_KEY);
+    var fcm = new FCM(configDev.NOTIFICATION_KEY);
      if(typeof params.token=='string') tokens.push(params.token)
 else  tokens=params.token;
 var title=params.title;
@@ -205,7 +205,7 @@ for(var k=0;k<tokens.length;k++)
 sendChatNotification :function (params)
  {
     var tokens=[];
-    var fcm = new FCM(config.NOTIFICATION_KEY);
+    var fcm = new FCM(configDev.NOTIFICATION_KEY);
      if(typeof params.token=='string') tokens.push(params.token)
 else  tokens=params.token;
 var title=params.title;
@@ -276,7 +276,7 @@ for(var k=0;k<tokens.length;k++)
 
 sendEmpNotification :async (params,tokensArray)=>
 {
-  var fcm = new FCM(config.NOTIFICATION_KEY);
+  var fcm = new FCM(configDev.NOTIFICATION_KEY);
   var title=params.title;
   var description =params.description;
   var count=params.count;
@@ -357,7 +357,7 @@ sendEmpNotification :async (params,tokensArray)=>
 },
 sendMultipleNotifications :function (tokensArray,title,message)
  {
-  var fcm = new FCM(config.NOTIFICATION_KEY);
+  var fcm = new FCM(configDev.NOTIFICATION_KEY);
   for(var k=0;k<tokensArray.length;k++)
   {
     console.log(tokensArray[k],"szcsdhagvda")

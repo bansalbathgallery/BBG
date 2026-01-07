@@ -104,7 +104,7 @@ module.exports = {
         
         if(params.status == '1')
         {
-          var dataEmail={name: userData.dataValues.companyName,app_name:config.APP_NAME}
+          var dataEmail={name: userData.dataValues.companyName,app_name:configDev.APP_NAME}
           commonNotification.sendApprovedMail(userData.dataValues.email,dataEmail)
         }
 

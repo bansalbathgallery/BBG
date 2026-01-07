@@ -37,7 +37,7 @@ module.exports = function(sequelize, DataTypes) {
           imageArray=[];
           for(var k=0;k<images.length;k++)
           {
-            imageArray.push( config.IMAGE_APPEND_URL+"services/icons/"+images[k]);
+            imageArray.push( configDev.IMAGE_APPEND_URL+"services/icons/"+images[k]);
           }
           return  imageArray;
         }

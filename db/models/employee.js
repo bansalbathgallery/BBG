@@ -72,7 +72,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: '',
       get() {
         if( this.getDataValue('image')!=null && this.getDataValue('image')!="")
-        return config.IMAGE_APPEND_URL+"employees/proofs/"+this.getDataValue('image')
+        return configDev.IMAGE_APPEND_URL+"employees/proofs/"+this.getDataValue('image')
         else  return ""
       },
     },
@@ -82,7 +82,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: '',
       get() {
         if( this.getDataValue('idProof')!=null && this.getDataValue('idProof')!="")
-        return config.IMAGE_APPEND_URL+"employees/proofs/"+this.getDataValue('idProof')
+        return configDev.IMAGE_APPEND_URL+"employees/proofs/"+this.getDataValue('idProof')
         else  return ""
       },
     },

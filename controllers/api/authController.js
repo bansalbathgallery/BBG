@@ -13,8 +13,8 @@ const mysql = require('mysql2/promise');
 require('dotenv').config({
   path: `../env-files/${process.env.NODE_ENV || 'development'}.env`,
 });
-const keyPublishable = config.PAYKEY;
-const keySecret = config.PAYSECRET;
+const keyPublishable = configDev.PAYKEY;
+const keySecret = configDev.PAYSECRET;
 const stripe = require("stripe")(keySecret);
 const userCard = db.models.userCards;
 const CHEF=db.models.chef;
@@ -98,8 +98,8 @@ module.exports = {
             id : userId
           };
 
-          const authToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.authTokenExpiration });
-          const refreshToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.refreshTokenExpiration });
+          const authToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.authTokenExpiration });
+          const refreshToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.refreshTokenExpiration });
           const userDetail = {};
           userDetail.phoneNumber = users.dataValues.phoneNumber;
           userDetail.firstName = users.dataValues.firstName;
@@ -170,8 +170,8 @@ module.exports = {
             id : userId
           };
 
-          const authToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.authTokenExpiration });
-          const refreshToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.refreshTokenExpiration });
+          const authToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.authTokenExpiration });
+          const refreshToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.refreshTokenExpiration });
           const userDetail = {};
           userDetail.email = users.dataValues.email;
           userDetail.firstName = users.dataValues.firstName;
@@ -194,7 +194,7 @@ module.exports = {
               id: users.dataValues.id
             }
           });
-          var dataEmail={name: users.dataValues.firstName,app_name:config.APP_NAME}
+          var dataEmail={name: users.dataValues.firstName,app_name:configDev.APP_NAME}
           commonNotification.sendMail(users.dataValues.email,dataEmail)
           return responseHelper.post(res, "Signup Successfully", userDetail);
         }
@@ -245,7 +245,7 @@ Weblogin: async (req, res) => {
         id : userData.dataValues.id
 
       },
-      config.jwtToken,
+      configDev.jwtToken,
       { algorithm: 'HS256', expiresIn: '2880m' }
       );
       var updatedResponse = await USER.update({
@@ -394,7 +394,7 @@ login: async (req, res) => {
         id : userData.dataValues.id
 
       },
-      config.jwtToken,
+      configDev.jwtToken,
       { algorithm: 'HS256', expiresIn: '2880m' }
       );
       var updatedResponse = await USER.update({
@@ -459,7 +459,7 @@ VerifyOTP: async (req, res) => {
         id : userData.dataValues.id
 
       },
-      config.jwtToken,
+      configDev.jwtToken,
       { algorithm: 'HS256', expiresIn: '2880m' }
       );
       var updatedResponse = await USER.update({
@@ -613,7 +613,7 @@ Sociallogin: async (req, res, next) => {
           id : companyDetails.dataValues.id
 
         },
-        config.jwtToken,
+        configDev.jwtToken,
         { 
           algorithm: 'HS256', expiresIn: '2880m' }
         );
@@ -648,8 +648,8 @@ Sociallogin: async (req, res, next) => {
         id : userId
       };
 
-      const authToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.authTokenExpiration });
-      const refreshToken = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256', expiresIn: config.refreshTokenExpiration });
+      const authToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.authTokenExpiration });
+      const refreshToken = jwt.sign(credentials, configDev.jwtToken, { algorithm: 'HS256', expiresIn: configDev.refreshTokenExpiration });
       const userDetail = {};
       userDetail.email = users.dataValues.email;
       userDetail.firstName = users.dataValues.firstName;
@@ -694,7 +694,7 @@ Sociallogin: async (req, res, next) => {
           id: users.dataValues.id
         }
       });
-      var dataEmail={name: users.dataValues.firstName,app_name:config.APP_NAME}
+      var dataEmail={name: users.dataValues.firstName,app_name:configDev.APP_NAME}
       commonNotification.sendMail(users.dataValues.email,dataEmail)
       return responseHelper.post(res, "Signup Successfully", userDetail);
     }
@@ -739,7 +739,7 @@ updateProfile: async (req, res, next) => {
       if (req.files) {
         ImageFile = req.files.profileImage;    
         imageName = Date.now() + '_' + ImageFile.name;
-        ImageFile.mv(config.UPLOAD_DIRECTORY +"users/"+ imageName, function (err) {
+        ImageFile.mv(configDev.UPLOAD_DIRECTORY +"users/"+ imageName, function (err) {
         if (err)
           responseHelper.error(res,err.message,400)
         });
@@ -808,7 +808,7 @@ updateProfile: async (req, res, next) => {
         let newpassword = Math.random().toString(36).slice(-8);
         const pswd = await hashPassword.generatePass(newpassword);
 
-        var dataEmail={name: userDetail.firstName,password: newpassword,app_name:config.APP_NAME}
+        var dataEmail={name: userDetail.firstName,password: newpassword,app_name:configDev.APP_NAME}
         commonNotification.sendForgotPasswordMail(userDetail.email,dataEmail)
 
         //Update Password
