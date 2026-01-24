@@ -22,7 +22,7 @@ module.exports = {
 	INVOICE_SUBJECT:'Info Message',
 	FOROGT_SUBJECT:'Reset Password request',
 	EMAIL_PASS :''  , 
-	APP_NAME:'Secret Menu',
+	APP_NAME:'BBG Loyality',
 	PAYKEY: '',
 	PAYSECRET: ''
 };
