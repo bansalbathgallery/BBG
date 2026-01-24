@@ -66,6 +66,7 @@ let modules = [
   require('./earnings'),
   require('./orderStatus'),
   require('./roles'),
+  require('./sales'),
 ];
 
 // Initialize models

@@ -11,5 +11,8 @@ module.exports = router => {
 	router.get('/customer/delete/:id',superAuth, AdminUserCtrl.delete);
 	router.get('/customer/orderList/:userId',superAuth, AdminUserCtrl.orderList);
 	router.get('/customer/chat/:userId',superAuth, AdminUserCtrl.chatHistory);
+	router.get('/customer/sale/:id',superAuth, AdminUserCtrl.addSale);
+	router.post('/customer/updateSale',superAuth, AdminUserCtrl.updateSale);
+	router.get('/customer/SaleList/:userId',superAuth, AdminUserCtrl.salelist);
 	return router;
 };

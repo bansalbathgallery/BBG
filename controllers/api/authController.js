@@ -795,21 +795,21 @@ updateProfile: async (req, res, next) => {
     **/
   forgotPassword: async (req, res, next) => {
     try {
-      const { email} = req.body;
+      const { params} = req.body;
       const UserData = await USER.findOne({
-          attributes: ['id', 'email'],
+          attributes: ['id', 'phoneNumber'],
           where: {
-            email: email,
+            phoneNumber: params.phoneNumber,
           }
       });
       if (UserData) {
         var userDetail = JSON.parse(JSON.stringify(UserData))
         
-        let newpassword = Math.random().toString(36).slice(-8);
-        const pswd = await hashPassword.generatePass(newpassword);
+        let password = Math.random().toString(36).slice(-8);
+        const pswd = await hashPassword.generatePass(params.password);
 
-        var dataEmail={name: userDetail.firstName,password: newpassword,app_name:configDev.APP_NAME}
-        commonNotification.sendForgotPasswordMail(userDetail.email,dataEmail)
+        // var dataEmail={name: userDetail.firstName,password: newpassword,app_name:configDev.APP_NAME}
+        // commonNotification.sendForgotPasswordMail(userDetail.email,dataEmail)
 
         //Update Password
         const updatePassword = await USER.update({
@@ -823,7 +823,7 @@ updateProfile: async (req, res, next) => {
 
        return responseHelper.post(res, appstrings.password_reset_success,null,200);
       }
-      return responseHelper.unauthorized(res, 'Invalid Email');
+      return responseHelper.unauthorized(res, 'Invalid phone number!');
     } catch (e) {
       return responseHelper.error(res, e.message, 400);
     }
@@ -1117,30 +1117,19 @@ updateProfile: async (req, res, next) => {
   changePassword:async(req,res,next) => { 
   
     var params=req.body;
-    let responseNull= commonMethods.checkParameterMissing([params.email,params.newPassword])
+    let responseNull= commonMethods.checkParameterMissing([params.phoneNumber,params.newPassword,params.oldPassword])
     if(responseNull) return responseHelper.post(res, appstrings.required_field,null,400);
 
     try{
     var userData = await USER.findOne({
       where: {
-        email: params.email,
+        phoneNumber: params.phoneNumber,
       }
     }); 
     if(userData)
     {
       var Password = userData.dataValues.password;
-    }else{
-      var restData = await COMPANY.findOne({
-        where: {
-          email: params.email,
-        }
-      }); 
-      if(!restData)
-      {
-        return responseHelper.post(res, appstrings.no_record,null,204);
-      }
-      var Password = restData.dataValues.password;
-    } 
+    }
 
     if(Password != "")
     {
@@ -1151,7 +1140,7 @@ updateProfile: async (req, res, next) => {
     }
     
     const newPassword = await hashPassword.generatePass(params.newPassword);
-    await COMPANY.update({ password: newPassword}, {where: { email:params.email}}) ; 
+    // await COMPANY.update({ password: newPassword}, {where: { email:params.email}}) ; 
     await USER.update({ password: newPassword}, {where: { email:params.email}}) ; 
     return responseHelper.post(res, appstrings.password_change_success,null,200);
 

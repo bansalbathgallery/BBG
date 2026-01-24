@@ -2,13 +2,15 @@
 const express = require('express');
 const app     = express();
 const Op = require('sequelize').Op;
+const { fn, col,cast,literal   } = require('sequelize');
 const CART     = db.models.cart
 const SERVICES = db.models.services;
 const userCoupan = db.models.userCoupons;
 const ORDERS     = db.models.orders;
 const SUBORDERS  = db.models.suborders;
 const orderPayment = db.models.payment;
-const USER= db.models.users
+const USER= db.models.users;
+const Sales = db.models.sales;
 //Relations
 CART.belongsTo(SERVICES,{foreignKey: 'serviceId'});
 ORDERS.hasMany(SUBORDERS, {foreignKey: 'orderId'});
@@ -16,6 +18,15 @@ ORDERS.hasOne(orderPayment,{foreignKey: 'orderId'});
 SUBORDERS.belongsTo(SERVICES,{foreignKey: 'serviceId'});
 ORDERS.belongsTo(USER,{foreignKey: 'userId'});
 ORDERS.belongsTo(COMPANY,{foreignKey: 'companyId'});
+// user.js
+USER.hasMany(Sales, {
+  foreignKey: 'userId'
+});
+
+// sale.js
+Sales.belongsTo(USER, {
+  foreignKey: 'userId'
+});
 module.exports = {
   /**
   *@Method Get
@@ -24,10 +35,25 @@ module.exports = {
   list: async (req, res, next) => {
     try {
       const findData = await USER.findAll({
-        order: [
-          ['createdAt','DESC']
-        ],      
+        attributes: [
+          'firstName','lastName','status','countryCode','phoneNumber','id',
+          [
+      literal('COALESCE(CAST(SUM(`sales`.`sale`) AS CHAR), "0")'),
+      'totalSale'
+    ]
+          ],
+
+        include: [
+            {
+              model: Sales,
+              required: false,
+              attributes: [],
+              where: { type: 'Deposit' },
+            }
+          ],
+        group: ['users.id']     
       });
+      console.log(findData)
       return res.render(superadminfilepath+'user/list.ejs',{data:findData});
     } catch (e) {
       return responseHelper.error(res, e.message, 400);
@@ -168,5 +194,57 @@ module.exports = {
       req.flash('errorMessage',appstrings.no_record)
       return res.redirect(superadminpath+"customer");
     }
-  }
+  },
+
+  addSale: async (req, res, next) => {
+    try {
+      let userId    = req.params.id;
+      const findData = await USER.findOne({
+        where: {
+          id: userId
+        } 
+      });
+      return res.render(superadminfilepath+'customer/addSale.ejs',{data:findData});
+    } catch (e) {
+      return responseHelper.error(res, e.message, 400);
+    }
+  },
+
+  /**
+  *@Method POST
+  *@role Insert New Sale
+  **/
+  updateSale: async(req,res,next) => { 
+    var params=req.body;
+    console.log(params)
+    const users = await Sales.create({
+      userId: params.userId,
+      name:params.sitename,
+      address: params.address,
+      sale: params.sale,
+      type: 'Deposit',
+      date: new Date().toLocaleDateString('en-GB')
+     });
+
+     return responseHelper.post(res, appstrings.success);
+
+  },
+  /**
+  *@Method Get
+  *@role Get Company List
+  */
+  salelist: async (req, res, next) => {
+    try {
+
+      let userId    = req.params.userId;
+      const findData = await Sales.findAll({
+              where: { userId: userId }
+          
+      });
+      console.log(findData)
+      return res.render(superadminfilepath+'customer/salelist.ejs',{data:findData});
+    } catch (e) {
+      return responseHelper.error(res, e.message, 400);
+    }
+  },
 };

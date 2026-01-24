@@ -13,7 +13,8 @@
                             <th data-column-id="name">Name</th>
                             <th data-column-id="Status">Allowed</th>
                             <th data-column-id="Phone">Phone No.</th>
-                            <th data-column-id="email" data-order="desc">Email Id</th>
+                            <th data-column-id="totalSales">Total Sale</th>
+                            <th data-column-id="viewSales" data-formatter="viewSales">View Sale</th>
                             <th data-column-id="commands" data-formatter="commands" data-sortable="false">Actions</th>
                         </tr>
                     </thead>
@@ -28,7 +29,7 @@
                                     <td>Block</td>
                                 <% } %>
                                 <td>(+<%-data[t].countryCode %>) <%-data[t].phoneNumber %> </td>
-                                <td><%-data[t].email %> </td>
+                                <td><%- data[t].totalSale %> </td>
                             </tr>
                         <%}%>
                     </tbody>
@@ -63,20 +64,27 @@
                     }else{
                         var toggle = "<button type=\"button\" class=\"btn btn-primary waves-effect command-unblock\" data-row-id=\"" + row.id + "\">Active</button>";
                     }
-                    return "<button type=\"button\" title=\"Chat History\" class=\"btn btn-icon command-chat waves-effect waves-circle\" data-row-id=\"" + row.id + "\"><span class=\"zmdi zmdi-comment-alt-text\"></span></button>" +
-                    "<button type=\"button\" title=\"View Orders\" class=\"btn btn-icon command-order waves-effect waves-circle\" data-row-id=\"" + row.id + "\"><span class=\"zmdi zmdi-view-carousel\"></span></button>" +
-                    toggle;
+
+                    var toggleSale = "<button type=\"button\" class=\"btn btn-primary waves-effect command-sale\" data-row-id=\"" + row.id + "\">Add Sale</button>";
+
+                    return toggle  + toggleSale;
+                },
+                "viewSales": function(column, row) {
+                    return "<button type=\"button\" class=\"btn btn-icon command-eye waves-effect waves-circle\" data-row-id=\"" + row.id + "\"><span class=\"zmdi zmdi-eye\"></span></button>";
                 }
             }
         }).on("loaded.rs.jquery.bootgrid", function()
         {
             /* Executes after data is loaded and rendered */
-            grid.find(".command-order").on("click", function(e)
+            grid.find(".command-saleList").on("click", function(e)
             {
                 window.location.href="<%-adminpath%>customer/orderList/"+$(this).data("row-id");
-            }).end().find(".command-chat").on("click", function(e)
+            }).end().find(".command-sale").on("click", function(e)
             {
-                window.location.href="<%-adminpath%>customer/chat/"+$(this).data("row-id");
+                window.location.href="<%-adminpath%>customer/sale/"+$(this).data("row-id");
+            }).end().find(".command-eye").on("click", function(e)
+            {
+                window.location.href="<%-adminpath%>customer/SaleList/"+$(this).data("row-id");
             }).end().find(".command-block").on("click", function(e)
             {
                 var id = $(this).data("row-id");
